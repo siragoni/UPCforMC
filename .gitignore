@@ -1,0 +1,8 @@
+#  -  Ignore Simulation files
+00*
+
+#  -  Ignore AliAnalysisTaskUPCforwardMC compilation files
+AliAnalysisTaskUPCforwardMC_*
+
+#  -  Ignore the AnalysisResults
+AnalysisResults*
