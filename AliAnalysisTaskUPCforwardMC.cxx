@@ -102,6 +102,15 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fDimuonPtDistributionH(0),
       fTemplatePtDistributionH(0),
       fTemplatePtDistributionRapidityH{ 0, 0, 0 },
+      //_______________________________
+      //
+      // SIDEBANDS
+      //
+      fTemplatePtDistributionHLowerSide(0),
+      fTemplatePtDistributionRapidityHLowerSide{ 0, 0, 0 },
+      fTemplatePtDistributionHHigherSide(0),
+      fTemplatePtDistributionRapidityHHigherSide{ 0, 0, 0 },
+      //_______________________________
       fDcaAgainstInvariantMassH(0),
       fInvariantMassDistributionExtendedH(0),
       fInvariantMassDistributionCoherentExtendedH(0),
@@ -219,6 +228,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fMCPhiHeFrameForSignalExH(0),
       fEfficiencyPerRunH(0),
       fMCEfficiencyPerRunH(0),
+      fEfficiencyPerRunRapidityH{0,0,0,0,0,0},
+      fMCEfficiencyPerRunRapidityH{0,0,0,0,0,0},
       fEtaAndPhi(0),
       fInvariantMassDistributionOnlyCosThetaForSignalExtractionHelicityFrameH{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -305,6 +316,15 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fDimuonPtDistributionH(0),
       fTemplatePtDistributionH(0),
       fTemplatePtDistributionRapidityH{ 0, 0, 0 },
+      //_______________________________
+      //
+      // SIDEBANDS
+      //
+      fTemplatePtDistributionHLowerSide(0),
+      fTemplatePtDistributionRapidityHLowerSide{ 0, 0, 0 },
+      fTemplatePtDistributionHHigherSide(0),
+      fTemplatePtDistributionRapidityHHigherSide{ 0, 0, 0 },
+      //_______________________________
       fDcaAgainstInvariantMassH(0),
       fInvariantMassDistributionExtendedH(0),
       fInvariantMassDistributionCoherentExtendedH(0),
@@ -422,6 +442,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fMCPhiHeFrameForSignalExH(0),
       fEfficiencyPerRunH(0),
       fMCEfficiencyPerRunH(0),
+      fEfficiencyPerRunRapidityH{0,0,0,0,0,0},
+      fMCEfficiencyPerRunRapidityH{0,0,0,0,0,0},
       fEtaAndPhi(0),
       fInvariantMassDistributionOnlyCosThetaForSignalExtractionHelicityFrameH{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -674,6 +696,35 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                     );
     fOutputList->Add(fTemplatePtDistributionRapidityH[iRapidityBin]);
   }
+
+  //_______________________________
+  /* -
+   * - SIDEBANDS
+   */
+  fTemplatePtDistributionHLowerSide = new TH1F("fTemplatePtDistributionHLowerSide", "fTemplatePtDistributionHLowerSide", 4000, 0, 20);
+  fOutputList->Add(fTemplatePtDistributionHLowerSide);
+
+  for( Int_t iRapidityBin = 0; iRapidityBin < 3; iRapidityBin++ ){
+    fTemplatePtDistributionRapidityHLowerSide[iRapidityBin] =
+          new TH1F( Form( "fTemplatePtDistributionRapidityHLowerSide_%d", iRapidityBin),
+                    Form( "fTemplatePtDistributionRapidityHLowerSide_%d", iRapidityBin),
+                    4000, 0, 20
+                    );
+    fOutputList->Add(fTemplatePtDistributionRapidityHLowerSide[iRapidityBin]);
+  }
+
+  fTemplatePtDistributionHHigherSide = new TH1F("fTemplatePtDistributionHHigherSide", "fTemplatePtDistributionHHigherSide", 4000, 0, 20);
+  fOutputList->Add(fTemplatePtDistributionHHigherSide);
+
+  for( Int_t iRapidityBin = 0; iRapidityBin < 3; iRapidityBin++ ){
+    fTemplatePtDistributionRapidityHHigherSide[iRapidityBin] =
+          new TH1F( Form( "fTemplatePtDistributionRapidityHHigherSide_%d", iRapidityBin),
+                    Form( "fTemplatePtDistributionRapidityHHigherSide_%d", iRapidityBin),
+                    4000, 0, 20
+                    );
+    fOutputList->Add(fTemplatePtDistributionRapidityHHigherSide[iRapidityBin]);
+  }
+  //_______________________________
 
   fDcaAgainstInvariantMassH = new TH2F("fDcaAgainstInvariantMassH", "fDcaAgainstInvariantMassH", 4000, 0, 40, 2000, -100, 100);
   fOutputList->Add(fDcaAgainstInvariantMassH);
@@ -1063,6 +1114,29 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
   fMCEfficiencyPerRunH->LabelsDeflate();
   fOutputList->Add(fMCEfficiencyPerRunH);
 
+  for(Int_t iRapidityBin = 0; iRapidityBin < 6; iRapidityBin++ ){
+
+        fEfficiencyPerRunRapidityH[iRapidityBin] = new TH1F( Form("fEfficiencyPerRunRapidityH_%d", iRapidityBin),
+                                                             Form("fEfficiencyPerRunRapidityH_%d", iRapidityBin),
+                                                             3, 0, 3
+                                                             );
+        fEfficiencyPerRunRapidityH[iRapidityBin]->SetStats(0);
+        fEfficiencyPerRunRapidityH[iRapidityBin]->SetFillColor(38);
+        fEfficiencyPerRunRapidityH[iRapidityBin]->LabelsDeflate();
+        fOutputList->Add(fEfficiencyPerRunRapidityH[iRapidityBin]);
+
+
+
+        fMCEfficiencyPerRunRapidityH[iRapidityBin] = new TH1F( Form("fMCEfficiencyPerRunRapidityH_%d", iRapidityBin),
+                                                               Form("fMCEfficiencyPerRunRapidityH_%d", iRapidityBin),
+                                                               3, 0, 3
+                                                               );
+        fMCEfficiencyPerRunRapidityH[iRapidityBin]->SetStats(0);
+        fMCEfficiencyPerRunRapidityH[iRapidityBin]->SetFillColor(38);
+        fMCEfficiencyPerRunRapidityH[iRapidityBin]->LabelsDeflate();
+        fOutputList->Add(fMCEfficiencyPerRunRapidityH[iRapidityBin]);
+  }
+
   /* - Eta vs Phi dead zones per Run.
    * -
    */
@@ -1333,14 +1407,16 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
   fCosThetaHelicityFrameTwentyfiveBinsH =
         new TH1F( "fCosThetaHelicityFrameTwentyfiveBinsH",
                   "fCosThetaHelicityFrameTwentyfiveBinsH",
-                  25, -1, 1
+                  // 25, -1, 1
+                  100, -1, 1 // Reweighting
                   );
   fOutputList->Add(fCosThetaHelicityFrameTwentyfiveBinsH);
 
   fMCCosThetaHelicityFrameTwentyfiveBinsH =
         new TH1F( "fMCCosThetaHelicityFrameTwentyfiveBinsH",
                   "fMCCosThetaHelicityFrameTwentyfiveBinsH",
-                  25, -1, 1
+                  // 25, -1, 1
+                  100, -1, 1 // Reweighting
                   );
   fOutputList->Add(fMCCosThetaHelicityFrameTwentyfiveBinsH);
 
@@ -1380,14 +1456,16 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
   fCosThetaCsFrameTwentyfiveBinsH =
         new TH1F( "fCosThetaCsFrameTwentyfiveBinsH",
                   "fCosThetaCsFrameTwentyfiveBinsH",
-                  25, -1, 1
+                  // 25, -1, 1
+                  100, -1, 1 // Reweighting
                   );
   fOutputList->Add(fCosThetaCsFrameTwentyfiveBinsH);
 
   fMCCosThetaCsFrameTwentyfiveBinsH =
         new TH1F( "fMCCosThetaCsFrameTwentyfiveBinsH",
                   "fMCCosThetaCsFrameTwentyfiveBinsH",
-                  25, -1, 1
+                  // 25, -1, 1
+                  100, -1, 1 // Reweighting
                   );
   fOutputList->Add(fMCCosThetaCsFrameTwentyfiveBinsH);
 
@@ -2024,16 +2102,22 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
   fInvariantMassDistributionH->Fill(possibleJPsi.Mag());
   if (        possibleJPsi.Rapidity() > -4.0  && possibleJPsi.Rapidity() <= -3.75 ) {
     fInvariantMassDistributionRapidityBinsH[0]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[0]             ->Fill( Form("%d", fRunNum) , 1 );
   } else if ( possibleJPsi.Rapidity() > -3.75 && possibleJPsi.Rapidity() <= -3.50 ) {
     fInvariantMassDistributionRapidityBinsH[1]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[1]             ->Fill( Form("%d", fRunNum) , 1 );
   } else if ( possibleJPsi.Rapidity() > -3.50 && possibleJPsi.Rapidity() <= -3.25 ) {
     fInvariantMassDistributionRapidityBinsH[2]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[2]             ->Fill( Form("%d", fRunNum) , 1 );
   } else if ( possibleJPsi.Rapidity() > -3.25 && possibleJPsi.Rapidity() <= -3.00 ) {
     fInvariantMassDistributionRapidityBinsH[3]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[3]             ->Fill( Form("%d", fRunNum) , 1 );
   } else if ( possibleJPsi.Rapidity() > -3.00 && possibleJPsi.Rapidity() <= -2.75 ) {
     fInvariantMassDistributionRapidityBinsH[4]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[4]             ->Fill( Form("%d", fRunNum) , 1 );
   } else if ( possibleJPsi.Rapidity() > -2.75 && possibleJPsi.Rapidity() <= -2.50 ) {
     fInvariantMassDistributionRapidityBinsH[5]->Fill(possibleJPsi.Mag());
+    fEfficiencyPerRunRapidityH[5]             ->Fill( Form("%d", fRunNum) , 1 );
   }
   fInvariantMassDistributionExtendedH->Fill(possibleJPsi.Mag());
 
@@ -2097,6 +2181,36 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
       fTemplatePtDistributionRapidityH[2]->Fill(possibleJPsi.Mag());
     }
   }
+
+  //_______________________________
+  //    SIDEBANDS
+  /* -
+   * - (LOWER)
+   */
+  if ( (possibleJPsi.Mag() > 2.4) && (possibleJPsi.Mag() < 2.8) ) {
+    fTemplatePtDistributionHLowerSide->Fill(ptOfTheDimuonPair);
+    if (        possibleJPsi.Rapidity() > -4.0  && possibleJPsi.Rapidity() <= -3.50 ) {
+      fTemplatePtDistributionRapidityHLowerSide[0]->Fill(possibleJPsi.Mag());
+    } else if ( possibleJPsi.Rapidity() > -3.50 && possibleJPsi.Rapidity() <= -3.00 ) {
+      fTemplatePtDistributionRapidityHLowerSide[1]->Fill(possibleJPsi.Mag());
+    } else if ( possibleJPsi.Rapidity() > -3.00 && possibleJPsi.Rapidity() <= -2.50 ) {
+      fTemplatePtDistributionRapidityHLowerSide[2]->Fill(possibleJPsi.Mag());
+    }
+  }
+  /* -
+   * - (HIGHER)
+   */
+  if ( (possibleJPsi.Mag() > 4.) && (possibleJPsi.Mag() < 5.5) ) {
+    fTemplatePtDistributionHHigherSide->Fill(ptOfTheDimuonPair);
+    if (        possibleJPsi.Rapidity() > -4.0  && possibleJPsi.Rapidity() <= -3.50 ) {
+      fTemplatePtDistributionRapidityHHigherSide[0]->Fill(possibleJPsi.Mag());
+    } else if ( possibleJPsi.Rapidity() > -3.50 && possibleJPsi.Rapidity() <= -3.00 ) {
+      fTemplatePtDistributionRapidityHHigherSide[1]->Fill(possibleJPsi.Mag());
+    } else if ( possibleJPsi.Rapidity() > -3.00 && possibleJPsi.Rapidity() <= -2.50 ) {
+      fTemplatePtDistributionRapidityHHigherSide[2]->Fill(possibleJPsi.Mag());
+    }
+  }
+
 
 
   /* - Filling the J/Psi's polarization plots.
@@ -2269,6 +2383,16 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           Double_t TildePhiPositiveCosThetaCS  = PhiCollinsSoperValue - 0.25 * 3.14;
           Double_t TildePhiNegativeCosThetaCS  = PhiCollinsSoperValue - 0.75 * 3.14;
 
+          /* -
+           * - IMPORTANT:
+           * -
+           * - Comment this when you are not doing the
+           * - polarisation check.
+           */
+          Double_t ReweightingCosThetaHE = 1.0 / ( 1.0 + CosThetaHelicityFrameValue10 * CosThetaHelicityFrameValue10 );
+          Double_t ReweightingCosThetaCS = 1.0 / ( 1.0 + CosThetaCollinsSoperValue    * CosThetaCollinsSoperValue    );
+
+
           if( TildePhiPositiveCosTheta < 0. ) {
             TildePhiPositiveCosTheta += 2 * TMath::Pi();
           }
@@ -2286,7 +2410,8 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           /* - HELICITY FRAME ANALYSIS
            * -
            */
-          fCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHelicityFrameValue10 );
+          // fCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHelicityFrameValue10 );
+          fCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHelicityFrameValue10, ReweightingCosThetaHE );
           fPhiHelicityFrameTwentyfiveBinsH     ->Fill( PhiHelicityFrameValue10 );
           if( CosThetaHelicityFrameValue10 > 0 ){
             fTildePhiHelicityFrameTwentyfiveBinsH->Fill( TildePhiPositiveCosTheta );
@@ -2297,7 +2422,8 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           /* - COLLINS-SOPER ANALYSIS
            * -
            */
-          fCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoperValue );
+          // fCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoperValue );
+          fCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoperValue, ReweightingCosThetaCS  );
           fPhiCsFrameTwentyfiveBinsH     ->Fill( PhiCollinsSoperValue );
           if( CosThetaCollinsSoperValue > 0 ){
             fTildePhiCsFrameTwentyfiveBinsH->Fill( TildePhiPositiveCosThetaCS );
@@ -2657,6 +2783,7 @@ Bool_t AliAnalysisTaskUPCforwardMC::IsTriggered()
   // cout << "is0UBAfired = ( fBBAFlagsAD = " << fBBAFlagsAD << " ) > 0 => " << is0UBAfired << endl;
   // cout << "is0UBCfired = ( fBBCFlagsAD = " << fBBCFlagsAD << " ) > 0 => " << is0UBCfired << endl;
   if (!is0VBAfired && !is0UBAfired && !is0UBCfired ) return kTRUE;
+  // if (!is0VBAfired) return kTRUE;
   else return kFALSE;
 
 }
@@ -2750,6 +2877,19 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
       }
       fMCinvariantMassDistrJPsiGeneratedTruthH->Fill(possibleJPsiMC.Mag());
       fMCptDimuonGeneratedTruthH->Fill(possibleJPsiMC.Pt());
+      if (        possibleJPsiMC.Rapidity() > -4.0  && possibleJPsiMC.Rapidity() <= -3.75 ) {
+        fMCEfficiencyPerRunRapidityH[0]->Fill( Form("%d", fRunNum) , 1 );
+      } else if ( possibleJPsiMC.Rapidity() > -3.75 && possibleJPsiMC.Rapidity() <= -3.50 ) {
+        fMCEfficiencyPerRunRapidityH[1]->Fill( Form("%d", fRunNum) , 1 );
+      } else if ( possibleJPsiMC.Rapidity() > -3.50 && possibleJPsiMC.Rapidity() <= -3.25 ) {
+        fMCEfficiencyPerRunRapidityH[2]->Fill( Form("%d", fRunNum) , 1 );
+      } else if ( possibleJPsiMC.Rapidity() > -3.25 && possibleJPsiMC.Rapidity() <= -3.00 ) {
+        fMCEfficiencyPerRunRapidityH[3]->Fill( Form("%d", fRunNum) , 1 );
+      } else if ( possibleJPsiMC.Rapidity() > -3.00 && possibleJPsiMC.Rapidity() <= -2.75 ) {
+        fMCEfficiencyPerRunRapidityH[4]->Fill( Form("%d", fRunNum) , 1 );
+      } else if ( possibleJPsiMC.Rapidity() > -2.75 && possibleJPsiMC.Rapidity() <= -2.50 ) {
+        fMCEfficiencyPerRunRapidityH[5]->Fill( Form("%d", fRunNum) , 1 );
+      }
       for( Int_t iBoosting = 0; iBoosting < 2; iBoosting++ ) {
         // TLorentzVector boostBack = -(possibleJPsiCopy).BoostVector();
         /* - This snippet has beem taken from the website:
@@ -2826,11 +2966,24 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                                                                         possibleJPsiMC
                                                                                         )
                                                                                        );
-                  fMCPhiHelicityFrameTwentyfiveBinsH->Fill( CosPhiHelicityFrame( muonsMCcopy[0],
-                                                                                 muonsMCcopy[1],
-                                                                                 possibleJPsiMC
-                                                                                 )
-                                                                                );
+                  /* -
+                   * - IMPORTANT:
+                   * -
+                   * - Comment this when you are not doing the
+                   * - polarisation check.
+                   */
+                  Double_t CosThetaHeForTrial   = CosThetaHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC);
+                  Double_t CosThetaCsForTrial   = CosThetaCollinsSoper( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC);
+                  // Double_t ReweightedCosThetaHE = CosThetaHeForTrial / ( 1 + CosThetaHeForTrial * CosThetaHeForTrial );
+                  // Double_t ReweightedCosThetaCS = CosThetaCsForTrial / ( 1 + CosThetaCsForTrial * CosThetaCsForTrial );
+                  Double_t ReweightedCosThetaHE = 1.0 / ( 1.0 + CosThetaHeForTrial * CosThetaHeForTrial );
+                  Double_t ReweightedCosThetaCS = 1.0 / ( 1.0 + CosThetaCsForTrial * CosThetaCsForTrial );
+                  fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial, ReweightedCosThetaHE );
+                  // fMCPhiHelicityFrameTwentyfiveBinsH->Fill( CosPhiHelicityFrame( muonsMCcopy[0],
+                  //                                                                muonsMCcopy[1],
+                  //                                                                possibleJPsiMC
+                  //                                                                )
+                  //                                                               );
                   if( CosThetaHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) > 0 ){
                     Double_t PhiHelicityFrameValueTruth  = CosPhiHelicityFrame( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC );
                     Double_t TildePhiPositiveCosTheta    = PhiHelicityFrameValueTruth - 0.25 * 3.14;
@@ -2858,11 +3011,12 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                   /* - COLLINS-SOPER ANALYSIS
                    * -
                    */
-                  fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoper( muonsMCcopy[0],
-                                                                                 muonsMCcopy[1],
-                                                                                 possibleJPsiMC
-                                                                                 )
-                                                                                );
+                  // fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoper( muonsMCcopy[0],
+                  //                                                                muonsMCcopy[1],
+                  //                                                                possibleJPsiMC
+                  //                                                                )
+                  //                                                               );
+                  fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCsForTrial, ReweightedCosThetaCS );
                   fMCPhiCsFrameTwentyfiveBinsH->Fill( CosPhiCollinsSoper( muonsMCcopy[0],
                                                                           muonsMCcopy[1],
                                                                           possibleJPsiMC
@@ -3077,11 +3231,24 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                   /* - HELICITY FRAME ANALYSIS
                    * -
                    */
-                  fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHelicityFrame( muonsMCcopy[1],
-                                                                                        muonsMCcopy[0],
-                                                                                        possibleJPsiMC
-                                                                                        )
-                                                                                       );
+                  /* -
+                   * - IMPORTANT:
+                   * -
+                   * - Comment this when you are not doing the
+                   * - polarisation check.
+                   */
+                  Double_t CosThetaHeForTrial   = CosThetaHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC);
+                  Double_t CosThetaCsForTrial   = CosThetaCollinsSoper( muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC);
+                  // Double_t ReweightedCosThetaHE = CosThetaHeForTrial / ( 1 + CosThetaHeForTrial * CosThetaHeForTrial );
+                  // Double_t ReweightedCosThetaCS = CosThetaCsForTrial / ( 1 + CosThetaCsForTrial * CosThetaCsForTrial );
+                  Double_t ReweightedCosThetaHE = 1.0 / ( 1.0 + CosThetaHeForTrial * CosThetaHeForTrial );
+                  Double_t ReweightedCosThetaCS = 1.0 / ( 1.0 + CosThetaCsForTrial * CosThetaCsForTrial );
+                  // fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHelicityFrame( muonsMCcopy[1],
+                  //                                                                       muonsMCcopy[0],
+                  //                                                                       possibleJPsiMC
+                  //                                                                       )
+                  //                                                                      );
+                  fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial, ReweightedCosThetaHE );
                   fMCPhiHelicityFrameTwentyfiveBinsH->Fill( CosPhiHelicityFrame( muonsMCcopy[1],
                                                                                  muonsMCcopy[0],
                                                                                  possibleJPsiMC
@@ -3114,11 +3281,12 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                   /* - COLLINS-SOPER ANALYSIS
                    * -
                    */
-                  fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoper( muonsMCcopy[1],
-                                                                                 muonsMCcopy[0],
-                                                                                 possibleJPsiMC
-                                                                                 )
-                                                                                );
+                  // fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoper( muonsMCcopy[1],
+                  //                                                                muonsMCcopy[0],
+                  //                                                                possibleJPsiMC
+                  //                                                                )
+                  //                                                               );
+                  fMCCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCsForTrial, ReweightedCosThetaCS );
                   fMCPhiCsFrameTwentyfiveBinsH->Fill( CosPhiCollinsSoper( muonsMCcopy[1],
                                                                           muonsMCcopy[0],
                                                                           possibleJPsiMC
@@ -3653,229 +3821,468 @@ void AliAnalysisTaskUPCforwardMC::SetLuminosityCap()
   else if ( fRunNum == 246989 ) { fLumiPerRun = 3.8342; }
   else if ( fRunNum == 246991 ) { fLumiPerRun = 0.4368; }
   else if ( fRunNum == 246994 ) { fLumiPerRun = 1.2329; }
-  else if ( fRunNum == 295585 ) { fLumiPerRun = 0.0793; }
-  else if ( fRunNum == 295586 ) { fLumiPerRun = 0.2386; }
-  else if ( fRunNum == 295587 ) { fLumiPerRun = 0.1095; }
-  else if ( fRunNum == 295588 ) { fLumiPerRun = 0.1358; }
-  else if ( fRunNum == 295589 ) { fLumiPerRun = 0.2819; }
-  else if ( fRunNum == 295612 ) { fLumiPerRun = 0.449;  }
-  else if ( fRunNum == 295615 ) { fLumiPerRun = 0.0566; }
-  else if ( fRunNum == 295665 ) { fLumiPerRun = 0.3349; }
-  else if ( fRunNum == 295666 ) { fLumiPerRun = 0.3239; }
-  else if ( fRunNum == 295667 ) { fLumiPerRun = 0.0970; }
-  else if ( fRunNum == 295668 ) { fLumiPerRun = 0.1303; }
-  else if ( fRunNum == 295671 ) { fLumiPerRun = 0.3259; }
-  else if ( fRunNum == 295673 ) { fLumiPerRun = 0.3128; }
-  else if ( fRunNum == 295675 ) { fLumiPerRun = 0.132;  }
-  else if ( fRunNum == 295676 ) { fLumiPerRun = 0.3213; }
-  else if ( fRunNum == 295677 ) { fLumiPerRun = 0.2652; }
-  else if ( fRunNum == 295714 ) { fLumiPerRun = 0.3456; }
-  else if ( fRunNum == 295716 ) { fLumiPerRun = 0.3389; }
-  else if ( fRunNum == 295717 ) { fLumiPerRun = 0.2880; }
-  else if ( fRunNum == 295718 ) { fLumiPerRun = 0.2567; }
-  else if ( fRunNum == 295719 ) { fLumiPerRun = 0.2947; }
-  else if ( fRunNum == 295723 ) { fLumiPerRun = 0.5064; }
-  else if ( fRunNum == 295725 ) { fLumiPerRun = 0.8890; }
-  else if ( fRunNum == 295753 ) { fLumiPerRun = 0.3846; }
-  else if ( fRunNum == 295754 ) { fLumiPerRun = 0.7055; }
-  else if ( fRunNum == 295755 ) { fLumiPerRun = 0.7585; }
-  else if ( fRunNum == 295758 ) { fLumiPerRun = 1.8934; }
-  else if ( fRunNum == 295759 ) { fLumiPerRun = 0.5331; }
-  else if ( fRunNum == 295762 ) { fLumiPerRun = 0.2749; }
-  else if ( fRunNum == 295763 ) { fLumiPerRun = 1.0282; }
-  else if ( fRunNum == 295786 ) { fLumiPerRun = 0.7490; }
-  else if ( fRunNum == 295788 ) { fLumiPerRun = 3.0237; }
-  else if ( fRunNum == 295791 ) { fLumiPerRun = 0.8580; }
-  else if ( fRunNum == 295816 ) { fLumiPerRun = 1.2056; }
-  else if ( fRunNum == 295818 ) { fLumiPerRun = 0.1453; }
-  else if ( fRunNum == 295819 ) { fLumiPerRun = 2.7474; }
-  else if ( fRunNum == 295822 ) { fLumiPerRun = 2.2529; }
-  else if ( fRunNum == 295825 ) { fLumiPerRun = 0.2558; }
-  else if ( fRunNum == 295826 ) { fLumiPerRun = 1.5814; }
-  else if ( fRunNum == 295829 ) { fLumiPerRun = 0.9351; }
-  else if ( fRunNum == 295831 ) { fLumiPerRun = 0.7762; }
-  else if ( fRunNum == 295854 ) { fLumiPerRun = 1.3119; }
-  else if ( fRunNum == 295855 ) { fLumiPerRun = 1.7466; }
-  else if ( fRunNum == 295856 ) { fLumiPerRun = 1.4700; }
-  else if ( fRunNum == 295859 ) { fLumiPerRun = 1.0510; }
-  else if ( fRunNum == 295860 ) { fLumiPerRun = 0.8341; }
-  else if ( fRunNum == 295861 ) { fLumiPerRun = 1.0670; }
-  else if ( fRunNum == 295863 ) { fLumiPerRun = 0.7279; }
-  else if ( fRunNum == 295881 ) { fLumiPerRun = 0.7115; }
-  else if ( fRunNum == 295908 ) { fLumiPerRun = 2.9261; }
-  else if ( fRunNum == 295909 ) { fLumiPerRun = 0.7875; }
-  else if ( fRunNum == 295910 ) { fLumiPerRun = 3.1843; }
-  else if ( fRunNum == 295913 ) { fLumiPerRun = 3.1294; }
-  else if ( fRunNum == 295936 ) { fLumiPerRun = 1.4736; }
-  else if ( fRunNum == 295937 ) { fLumiPerRun = 0.4057; }
-  else if ( fRunNum == 295941 ) { fLumiPerRun = 1.6767; }
-  else if ( fRunNum == 295942 ) { fLumiPerRun = 1.9237; }
-  else if ( fRunNum == 295943 ) { fLumiPerRun = 1.6747; }
-  else if ( fRunNum == 295945 ) { fLumiPerRun = 2.0370; }
-  else if ( fRunNum == 295947 ) { fLumiPerRun = 2.6337; }
-  else if ( fRunNum == 296061 ) { fLumiPerRun = 1.2968; }
-  else if ( fRunNum == 296062 ) { fLumiPerRun = 1.8083; }
-  else if ( fRunNum == 296063 ) { fLumiPerRun = 2.6876; }
-  else if ( fRunNum == 296065 ) { fLumiPerRun = 2.4473; }
-  else if ( fRunNum == 296066 ) { fLumiPerRun = 0.7337; }
-  else if ( fRunNum == 296068 ) { fLumiPerRun = 1.9812; }
-  else if ( fRunNum == 296123 ) { fLumiPerRun = 0.5065; }
-  else if ( fRunNum == 296128 ) { fLumiPerRun = 0.4455; }
-  else if ( fRunNum == 296132 ) { fLumiPerRun = 1.312;  }
-  else if ( fRunNum == 296133 ) { fLumiPerRun = 1.7321; }
-  else if ( fRunNum == 296134 ) { fLumiPerRun = 3.9104; }
+  //_______________________________
+  /* -
+   * -
+   * - POLARISATION ANALYSIS
+   * -
+   */
+  // else if ( fRunNum == 295585 ) { fLumiPerRun = 0.0793; }
+  // else if ( fRunNum == 295586 ) { fLumiPerRun = 0.2386; }
+  // else if ( fRunNum == 295587 ) { fLumiPerRun = 0.1095; }
+  // else if ( fRunNum == 295588 ) { fLumiPerRun = 0.1358; }
+  // else if ( fRunNum == 295589 ) { fLumiPerRun = 0.2819; }
+  // else if ( fRunNum == 295612 ) { fLumiPerRun = 0.449;  }
+  // else if ( fRunNum == 295615 ) { fLumiPerRun = 0.0566; }
+  // else if ( fRunNum == 295665 ) { fLumiPerRun = 0.3349; }
+  // else if ( fRunNum == 295666 ) { fLumiPerRun = 0.3239; }
+  // else if ( fRunNum == 295667 ) { fLumiPerRun = 0.0970; }
+  // else if ( fRunNum == 295668 ) { fLumiPerRun = 0.1303; }
+  // else if ( fRunNum == 295671 ) { fLumiPerRun = 0.3259; }
+  // else if ( fRunNum == 295673 ) { fLumiPerRun = 0.3128; }
+  // else if ( fRunNum == 295675 ) { fLumiPerRun = 0.132;  }
+  // else if ( fRunNum == 295676 ) { fLumiPerRun = 0.3213; }
+  // else if ( fRunNum == 295677 ) { fLumiPerRun = 0.2652; }
+  // else if ( fRunNum == 295714 ) { fLumiPerRun = 0.3456; }
+  // else if ( fRunNum == 295716 ) { fLumiPerRun = 0.3389; }
+  // else if ( fRunNum == 295717 ) { fLumiPerRun = 0.2880; }
+  // else if ( fRunNum == 295718 ) { fLumiPerRun = 0.2567; }
+  // else if ( fRunNum == 295719 ) { fLumiPerRun = 0.2947; }
+  // else if ( fRunNum == 295723 ) { fLumiPerRun = 0.5064; }
+  // else if ( fRunNum == 295725 ) { fLumiPerRun = 0.8890; }
+  // else if ( fRunNum == 295753 ) { fLumiPerRun = 0.3846; }
+  // else if ( fRunNum == 295754 ) { fLumiPerRun = 0.7055; }
+  // else if ( fRunNum == 295755 ) { fLumiPerRun = 0.7585; }
+  // else if ( fRunNum == 295758 ) { fLumiPerRun = 1.8934; }
+  // else if ( fRunNum == 295759 ) { fLumiPerRun = 0.5331; }
+  // else if ( fRunNum == 295762 ) { fLumiPerRun = 0.2749; }
+  // else if ( fRunNum == 295763 ) { fLumiPerRun = 1.0282; }
+  // else if ( fRunNum == 295786 ) { fLumiPerRun = 0.7490; }
+  // else if ( fRunNum == 295788 ) { fLumiPerRun = 3.0237; }
+  // else if ( fRunNum == 295791 ) { fLumiPerRun = 0.8580; }
+  // else if ( fRunNum == 295816 ) { fLumiPerRun = 1.2056; }
+  // else if ( fRunNum == 295818 ) { fLumiPerRun = 0.1453; }
+  // else if ( fRunNum == 295819 ) { fLumiPerRun = 2.7474; }
+  // else if ( fRunNum == 295822 ) { fLumiPerRun = 2.2529; }
+  // else if ( fRunNum == 295825 ) { fLumiPerRun = 0.2558; }
+  // else if ( fRunNum == 295826 ) { fLumiPerRun = 1.5814; }
+  // else if ( fRunNum == 295829 ) { fLumiPerRun = 0.9351; }
+  // else if ( fRunNum == 295831 ) { fLumiPerRun = 0.7762; }
+  // else if ( fRunNum == 295854 ) { fLumiPerRun = 1.3119; }
+  // else if ( fRunNum == 295855 ) { fLumiPerRun = 1.7466; }
+  // else if ( fRunNum == 295856 ) { fLumiPerRun = 1.4700; }
+  // else if ( fRunNum == 295859 ) { fLumiPerRun = 1.0510; }
+  // else if ( fRunNum == 295860 ) { fLumiPerRun = 0.8341; }
+  // else if ( fRunNum == 295861 ) { fLumiPerRun = 1.0670; }
+  // else if ( fRunNum == 295863 ) { fLumiPerRun = 0.7279; }
+  // else if ( fRunNum == 295881 ) { fLumiPerRun = 0.7115; }
+  // else if ( fRunNum == 295908 ) { fLumiPerRun = 2.9261; }
+  // else if ( fRunNum == 295909 ) { fLumiPerRun = 0.7875; }
+  // else if ( fRunNum == 295910 ) { fLumiPerRun = 3.1843; }
+  // else if ( fRunNum == 295913 ) { fLumiPerRun = 3.1294; }
+  // else if ( fRunNum == 295936 ) { fLumiPerRun = 1.4736; }
+  // else if ( fRunNum == 295937 ) { fLumiPerRun = 0.4057; }
+  // else if ( fRunNum == 295941 ) { fLumiPerRun = 1.6767; }
+  // else if ( fRunNum == 295942 ) { fLumiPerRun = 1.9237; }
+  // else if ( fRunNum == 295943 ) { fLumiPerRun = 1.6747; }
+  // else if ( fRunNum == 295945 ) { fLumiPerRun = 2.0370; }
+  // else if ( fRunNum == 295947 ) { fLumiPerRun = 2.6337; }
+  // else if ( fRunNum == 296061 ) { fLumiPerRun = 1.2968; }
+  // else if ( fRunNum == 296062 ) { fLumiPerRun = 1.8083; }
+  // else if ( fRunNum == 296063 ) { fLumiPerRun = 2.6876; }
+  // else if ( fRunNum == 296065 ) { fLumiPerRun = 2.4473; }
+  // else if ( fRunNum == 296066 ) { fLumiPerRun = 0.7337; }
+  // else if ( fRunNum == 296068 ) { fLumiPerRun = 1.9812; }
+  // else if ( fRunNum == 296123 ) { fLumiPerRun = 0.5065; }
+  // else if ( fRunNum == 296128 ) { fLumiPerRun = 0.4455; }
+  // else if ( fRunNum == 296132 ) { fLumiPerRun = 1.312;  }
+  // else if ( fRunNum == 296133 ) { fLumiPerRun = 1.7321; }
+  // else if ( fRunNum == 296134 ) { fLumiPerRun = 3.9104; }
+  // else if ( fRunNum == 296135 ) { fLumiPerRun = 2.3412; }
+  // else if ( fRunNum == 296142 ) { fLumiPerRun = 1.7893; }
+  // else if ( fRunNum == 296143 ) { fLumiPerRun = 0.5340; }
+  // else if ( fRunNum == 296191 ) { fLumiPerRun = 5.0507; }
+  // else if ( fRunNum == 296192 ) { fLumiPerRun = 0.4974; }
+  // else if ( fRunNum == 296194 ) { fLumiPerRun = 2.8725; }
+  // else if ( fRunNum == 296195 ) { fLumiPerRun = 0.7376; }
+  // else if ( fRunNum == 296196 ) { fLumiPerRun = 2.352;  }
+  // else if ( fRunNum == 296197 ) { fLumiPerRun = 2.0691; }
+  // else if ( fRunNum == 296198 ) { fLumiPerRun = 0.8140; }
+  // else if ( fRunNum == 296241 ) { fLumiPerRun = 0.8459; }
+  // else if ( fRunNum == 296242 ) { fLumiPerRun = 0.9517; }
+  // else if ( fRunNum == 296243 ) { fLumiPerRun = 1.5674; }
+  // else if ( fRunNum == 296244 ) { fLumiPerRun = 8.3722; }
+  // else if ( fRunNum == 296246 ) { fLumiPerRun = 1.8351; }
+  // else if ( fRunNum == 296247 ) { fLumiPerRun = 1.1765; }
+  // else if ( fRunNum == 296269 ) { fLumiPerRun = 3.8392; }
+  // else if ( fRunNum == 296270 ) { fLumiPerRun = 1.5116; }
+  // else if ( fRunNum == 296273 ) { fLumiPerRun = 7.2237; }
+  // else if ( fRunNum == 296279 ) { fLumiPerRun = 0.4057; }
+  // else if ( fRunNum == 296280 ) { fLumiPerRun = 1.5066; }
+  // else if ( fRunNum == 296303 ) { fLumiPerRun = 2.006;  }
+  // else if ( fRunNum == 296304 ) { fLumiPerRun = 6.0965; }
+  // else if ( fRunNum == 296307 ) { fLumiPerRun = 2.9023; }
+  // else if ( fRunNum == 296309 ) { fLumiPerRun = 2.1026; }
+  // else if ( fRunNum == 296312 ) { fLumiPerRun = 2.1228; }
+  // else if ( fRunNum == 296377 ) { fLumiPerRun = 6.0666; }
+  // else if ( fRunNum == 296378 ) { fLumiPerRun = 5.3897; }
+  // else if ( fRunNum == 296379 ) { fLumiPerRun = 2.0969; }
+  // else if ( fRunNum == 296380 ) { fLumiPerRun = 2.8820; }
+  // else if ( fRunNum == 296381 ) { fLumiPerRun = 1.4418; }
+  // else if ( fRunNum == 296383 ) { fLumiPerRun = 1.5136; }
+  // else if ( fRunNum == 296414 ) { fLumiPerRun = 4.8766; }
+  // else if ( fRunNum == 296419 ) { fLumiPerRun = 2.7523; }
+  // else if ( fRunNum == 296420 ) { fLumiPerRun = 1.4132; }
+  // else if ( fRunNum == 296423 ) { fLumiPerRun = 1.5981; }
+  // else if ( fRunNum == 296424 ) { fLumiPerRun = 0.3864; }
+  // else if ( fRunNum == 296433 ) { fLumiPerRun = 4.0456; }
+  // else if ( fRunNum == 296472 ) { fLumiPerRun = 0.8632; }
+  // else if ( fRunNum == 296509 ) { fLumiPerRun = 2.9592; }
+  // else if ( fRunNum == 296510 ) { fLumiPerRun = 9.0673; }
+  // else if ( fRunNum == 296511 ) { fLumiPerRun = 2.5666; }
+  // else if ( fRunNum == 296514 ) { fLumiPerRun = 0.4898; }
+  // else if ( fRunNum == 296516 ) { fLumiPerRun = 0.6134; }
+  // else if ( fRunNum == 296547 ) { fLumiPerRun = 1.0834; }
+  // else if ( fRunNum == 296548 ) { fLumiPerRun = 1.3771; }
+  // else if ( fRunNum == 296549 ) { fLumiPerRun = 4.8645; }
+  // else if ( fRunNum == 296550 ) { fLumiPerRun = 3.9901; }
+  // else if ( fRunNum == 296551 ) { fLumiPerRun = 2.0214; }
+  // else if ( fRunNum == 296552 ) { fLumiPerRun = 0.4842; }
+  // else if ( fRunNum == 296553 ) { fLumiPerRun = 0.7091; }
+  // else if ( fRunNum == 296615 ) { fLumiPerRun = 1.5676; }
+  // else if ( fRunNum == 296616 ) { fLumiPerRun = 0.5399; }
+  // else if ( fRunNum == 296618 ) { fLumiPerRun = 1.7014; }
+  // else if ( fRunNum == 296619 ) { fLumiPerRun = 1.5613; }
+  // else if ( fRunNum == 296622 ) { fLumiPerRun = 0.7064; }
+  // else if ( fRunNum == 296623 ) { fLumiPerRun = 2.1442; }
+  // else if ( fRunNum == 296690 ) { fLumiPerRun = 6.8615; }
+  // else if ( fRunNum == 296691 ) { fLumiPerRun = 0.6511; }
+  // else if ( fRunNum == 296694 ) { fLumiPerRun = 5.1826; }
+  // else if ( fRunNum == 296749 ) { fLumiPerRun = 9.2413; }
+  // else if ( fRunNum == 296750 ) { fLumiPerRun = 8.2161; }
+  // else if ( fRunNum == 296781 ) { fLumiPerRun = 0.8179; }
+  // else if ( fRunNum == 296784 ) { fLumiPerRun = 2.98;   }
+  // else if ( fRunNum == 296785 ) { fLumiPerRun = 1.9085; }
+  // else if ( fRunNum == 296786 ) { fLumiPerRun = 0.7537; }
+  // else if ( fRunNum == 296787 ) { fLumiPerRun = 3.2190; }
+  // else if ( fRunNum == 296791 ) { fLumiPerRun = 0.7573; }
+  // else if ( fRunNum == 296793 ) { fLumiPerRun = 1.3317; }
+  // else if ( fRunNum == 296794 ) { fLumiPerRun = 3.1335; }
+  // else if ( fRunNum == 296799 ) { fLumiPerRun = 2.7149; }
+  // else if ( fRunNum == 296836 ) { fLumiPerRun = 1.5116; }
+  // else if ( fRunNum == 296838 ) { fLumiPerRun = 0.5432; }
+  // else if ( fRunNum == 296839 ) { fLumiPerRun = 2.9424; }
+  // else if ( fRunNum == 296848 ) { fLumiPerRun = 2.1628; }
+  // else if ( fRunNum == 296849 ) { fLumiPerRun = 11.469; }
+  // else if ( fRunNum == 296850 ) { fLumiPerRun = 2.7979; }
+  // else if ( fRunNum == 296851 ) { fLumiPerRun = 0.1392; }
+  // else if ( fRunNum == 296852 ) { fLumiPerRun = 0.9565; }
+  // else if ( fRunNum == 296890 ) { fLumiPerRun = 8.0545; }
+  // else if ( fRunNum == 296894 ) { fLumiPerRun = 4.6472; }
+  // else if ( fRunNum == 296899 ) { fLumiPerRun = 2.1355; }
+  // else if ( fRunNum == 296900 ) { fLumiPerRun = 2.7833; }
+  // else if ( fRunNum == 296903 ) { fLumiPerRun = 1.0391; }
+  // else if ( fRunNum == 296930 ) { fLumiPerRun = 1.4575; }
+  // else if ( fRunNum == 296931 ) { fLumiPerRun = 0.5292; }
+  // else if ( fRunNum == 296932 ) { fLumiPerRun = 1.1863; }
+  // else if ( fRunNum == 296934 ) { fLumiPerRun = 2.5917; }
+  // else if ( fRunNum == 296935 ) { fLumiPerRun = 4.4039; }
+  // else if ( fRunNum == 296938 ) { fLumiPerRun = 1.6678; }
+  // else if ( fRunNum == 296941 ) { fLumiPerRun = 2.9181; }
+  // else if ( fRunNum == 296966 ) { fLumiPerRun = 3.3611; }
+  // else if ( fRunNum == 296967 ) { fLumiPerRun = 0.8051; }
+  // else if ( fRunNum == 296968 ) { fLumiPerRun = 3.1905; }
+  // else if ( fRunNum == 296969 ) { fLumiPerRun = 1.8878; }
+  // else if ( fRunNum == 296971 ) { fLumiPerRun = 0.6907; }
+  // else if ( fRunNum == 296975 ) { fLumiPerRun = 7.3683; }
+  // else if ( fRunNum == 296976 ) { fLumiPerRun = 1.1175; }
+  // else if ( fRunNum == 296979 ) { fLumiPerRun = 1.0995; }
+  // else if ( fRunNum == 297029 ) { fLumiPerRun = 7.2370; }
+  // else if ( fRunNum == 297031 ) { fLumiPerRun = 6.0499; }
+  // else if ( fRunNum == 297035 ) { fLumiPerRun = 0.5705; }
+  // else if ( fRunNum == 297085 ) { fLumiPerRun = 0.9774; }
+  // else if ( fRunNum == 297117 ) { fLumiPerRun = 2.3096; }
+  // else if ( fRunNum == 297118 ) { fLumiPerRun = 2.43;   }
+  // else if ( fRunNum == 297119 ) { fLumiPerRun = 2.6870; }
+  // else if ( fRunNum == 297123 ) { fLumiPerRun = 3.2804; }
+  // else if ( fRunNum == 297124 ) { fLumiPerRun = 0.6395; }
+  // else if ( fRunNum == 297128 ) { fLumiPerRun = 2.411;  }
+  // else if ( fRunNum == 297129 ) { fLumiPerRun = 2.8300; }
+  // else if ( fRunNum == 297132 ) { fLumiPerRun = 2.8179; }
+  // else if ( fRunNum == 297133 ) { fLumiPerRun = 1.1454; }
+  // else if ( fRunNum == 297193 ) { fLumiPerRun = 7.5602; }
+  // else if ( fRunNum == 297194 ) { fLumiPerRun = 8.8428; }
+  // else if ( fRunNum == 297196 ) { fLumiPerRun = 2.1255; }
+  // else if ( fRunNum == 297218 ) { fLumiPerRun = 6.42;   }
+  // else if ( fRunNum == 297219 ) { fLumiPerRun = 10.531; }
+  // else if ( fRunNum == 297221 ) { fLumiPerRun = 2.8309; }
+  // else if ( fRunNum == 297222 ) { fLumiPerRun = 1.7175; }
+  // else if ( fRunNum == 297278 ) { fLumiPerRun = 0.6019; }
+  // else if ( fRunNum == 297310 ) { fLumiPerRun = 0.6701; }
+  // else if ( fRunNum == 297312 ) { fLumiPerRun = 2.4002; }
+  // else if ( fRunNum == 297315 ) { fLumiPerRun = 7.8271; }
+  // else if ( fRunNum == 297317 ) { fLumiPerRun = 4.3148; }
+  // else if ( fRunNum == 297363 ) { fLumiPerRun = 1.9122; }
+  // else if ( fRunNum == 297366 ) { fLumiPerRun = 2.1293; }
+  // else if ( fRunNum == 297367 ) { fLumiPerRun = 3.1548; }
+  // else if ( fRunNum == 297372 ) { fLumiPerRun = 3.2003; }
+  // else if ( fRunNum == 297379 ) { fLumiPerRun = 6.8050; }
+  // else if ( fRunNum == 297380 ) { fLumiPerRun = 1.5488; }
+  // else if ( fRunNum == 297405 ) { fLumiPerRun = 0.6007; }
+  // else if ( fRunNum == 297408 ) { fLumiPerRun = 4.1021; }
+  // else if ( fRunNum == 297413 ) { fLumiPerRun = 2.9907; }
+  // else if ( fRunNum == 297414 ) { fLumiPerRun = 2.2140; }
+  // else if ( fRunNum == 297415 ) { fLumiPerRun = 6.8227; }
+  // else if ( fRunNum == 297441 ) { fLumiPerRun = 5.0556; }
+  // else if ( fRunNum == 297442 ) { fLumiPerRun = 1.9878; }
+  // else if ( fRunNum == 297446 ) { fLumiPerRun = 8.1326; }
+  // else if ( fRunNum == 297450 ) { fLumiPerRun = 1.9518; }
+  // else if ( fRunNum == 297451 ) { fLumiPerRun = 1.3327; }
+  // else if ( fRunNum == 297452 ) { fLumiPerRun = 1.1512; }
+  // else if ( fRunNum == 297479 ) { fLumiPerRun = 7.7463; }
+  // else if ( fRunNum == 297481 ) { fLumiPerRun = 10.645; }
+  // else if ( fRunNum == 297483 ) { fLumiPerRun = 1.9505; }
+  // else if ( fRunNum == 297512 ) { fLumiPerRun = 1.5848; }
+  // else if ( fRunNum == 297537 ) { fLumiPerRun = 1.8096; }
+  // else if ( fRunNum == 297540 ) { fLumiPerRun = 0.6286; }
+  // else if ( fRunNum == 297541 ) { fLumiPerRun = 4.0120; }
+  // else if ( fRunNum == 297542 ) { fLumiPerRun = 1.5362; }
+  // else if ( fRunNum == 297544 ) { fLumiPerRun = 7.2900; }
+  // else if ( fRunNum == 297558 ) { fLumiPerRun = 0.4783; }
+  // else if ( fRunNum == 297588 ) { fLumiPerRun = 5.2912; }
+  // else if ( fRunNum == 297590 ) { fLumiPerRun = 3.06;   }
+  //_______________________________
+  //_______________________________
+  /* -
+   * -
+   * - CHECKAD ANALYSIS
+   * -
+   */
+  else if ( fRunNum == 295585 ) { fLumiPerRun = 0.0793352; }
+  else if ( fRunNum == 295586 ) { fLumiPerRun = 0.238599; }
+  else if ( fRunNum == 295587 ) { fLumiPerRun = 0.109518; }
+  else if ( fRunNum == 295588 ) { fLumiPerRun = 0.135709; }
+  else if ( fRunNum == 295589 ) { fLumiPerRun = 0.281897; }
+  else if ( fRunNum == 295612 ) { fLumiPerRun = 0.448985; }
+  else if ( fRunNum == 295615 ) { fLumiPerRun = 0.0565828; }
+  else if ( fRunNum == 295665 ) { fLumiPerRun = 0.334733; }
+  else if ( fRunNum == 295666 ) { fLumiPerRun = 0.323941; }
+  else if ( fRunNum == 295667 ) { fLumiPerRun = 0.0970128; }
+  else if ( fRunNum == 295668 ) { fLumiPerRun = 0.130088; }
+  else if ( fRunNum == 295671 ) { fLumiPerRun = 0.325985; }
+  else if ( fRunNum == 295673 ) { fLumiPerRun = 0.312556; }
+  else if ( fRunNum == 295675 ) { fLumiPerRun = 0.13204; }
+  else if ( fRunNum == 295676 ) { fLumiPerRun = 0.321284; }
+  else if ( fRunNum == 295677 ) { fLumiPerRun = 0.265538; }
+  else if ( fRunNum == 295714 ) { fLumiPerRun = 0.345554; }
+  else if ( fRunNum == 295716 ) { fLumiPerRun = 0.33778; }
+  else if ( fRunNum == 295717 ) { fLumiPerRun = 0.287941; }
+  else if ( fRunNum == 295718 ) { fLumiPerRun = 0.257395; }
+  else if ( fRunNum == 295719 ) { fLumiPerRun = 0.294713; }
+  else if ( fRunNum == 295723 ) { fLumiPerRun = 0.506379; }
+  else if ( fRunNum == 295725 ) { fLumiPerRun = 0.8453; }
+  else if ( fRunNum == 295753 ) { fLumiPerRun = 0.384579; }
+  else if ( fRunNum == 295754 ) { fLumiPerRun = 1.12405; }
+  else if ( fRunNum == 295755 ) { fLumiPerRun = 1.01645; }
+  else if ( fRunNum == 295758 ) { fLumiPerRun = 1.62041; }
+  else if ( fRunNum == 295759 ) { fLumiPerRun = 0.532728; }
+  else if ( fRunNum == 295762 ) { fLumiPerRun = 0.274725; }
+  else if ( fRunNum == 295763 ) { fLumiPerRun = 1.0236; }
+  else if ( fRunNum == 295786 ) { fLumiPerRun = 0.746701; }
+  else if ( fRunNum == 295788 ) { fLumiPerRun = 3.06545; }
+  else if ( fRunNum == 295791 ) { fLumiPerRun = 0.85713; }
+  else if ( fRunNum == 295816 ) { fLumiPerRun = 1.20498; }
+  else if ( fRunNum == 295818 ) { fLumiPerRun = 0.145167; }
+  else if ( fRunNum == 295819 ) { fLumiPerRun = 2.74121; }
+  else if ( fRunNum == 295822 ) { fLumiPerRun = 2.2132; }
+  else if ( fRunNum == 295825 ) { fLumiPerRun = 0.255836; }
+  else if ( fRunNum == 295826 ) { fLumiPerRun = 1.48001; }
+  else if ( fRunNum == 295829 ) { fLumiPerRun = 0.934546; }
+  else if ( fRunNum == 295831 ) { fLumiPerRun = 0.779334; }
+  else if ( fRunNum == 295854 ) { fLumiPerRun = 1.73457; }
+  else if ( fRunNum == 295855 ) { fLumiPerRun = 1.74464; }
+  else if ( fRunNum == 295856 ) { fLumiPerRun = 1.73755; }
+  else if ( fRunNum == 295859 ) { fLumiPerRun = 1.05037; }
+  else if ( fRunNum == 295860 ) { fLumiPerRun = 0.834142; }
+  else if ( fRunNum == 295861 ) { fLumiPerRun = 1.06703; }
+  else if ( fRunNum == 295863 ) { fLumiPerRun = 0.728227; }
+  else if ( fRunNum == 295881 ) { fLumiPerRun = 0.711494; }
+  else if ( fRunNum == 295908 ) { fLumiPerRun = 2.92589; }
+  else if ( fRunNum == 295909 ) { fLumiPerRun = 0.787373; }
+  else if ( fRunNum == 295910 ) { fLumiPerRun = 3.19503; }
+  else if ( fRunNum == 295913 ) { fLumiPerRun = 3.12937; }
+  else if ( fRunNum == 295936 ) { fLumiPerRun = 1.47357; }
+  else if ( fRunNum == 295937 ) { fLumiPerRun = 0.405657; }
+  else if ( fRunNum == 295941 ) { fLumiPerRun = 1.67616; }
+  else if ( fRunNum == 295942 ) { fLumiPerRun = 1.92337; }
+  else if ( fRunNum == 295943 ) { fLumiPerRun = 1.67424; }
+  else if ( fRunNum == 295945 ) { fLumiPerRun = 2.03661; }
+  else if ( fRunNum == 295947 ) { fLumiPerRun = 2.69035; }
+  else if ( fRunNum == 296061 ) { fLumiPerRun = 1.29676; }
+  else if ( fRunNum == 296062 ) { fLumiPerRun = 1.80833; }
+  else if ( fRunNum == 296063 ) { fLumiPerRun = 2.69974; }
+  else if ( fRunNum == 296065 ) { fLumiPerRun = 2.45097; }
+  else if ( fRunNum == 296066 ) { fLumiPerRun = 0.733886; }
+  else if ( fRunNum == 296068 ) { fLumiPerRun = 1.98122; }
+  else if ( fRunNum == 296123 ) { fLumiPerRun = 0.506486; }
+  else if ( fRunNum == 296128 ) { fLumiPerRun = 0.445452; }
+  else if ( fRunNum == 296132 ) { fLumiPerRun = 2.10822; }
+  else if ( fRunNum == 296133 ) { fLumiPerRun = 1.73213; }
+  else if ( fRunNum == 296134 ) { fLumiPerRun = 3.91041; }
   else if ( fRunNum == 296135 ) { fLumiPerRun = 2.3412; }
-  else if ( fRunNum == 296142 ) { fLumiPerRun = 1.7893; }
-  else if ( fRunNum == 296143 ) { fLumiPerRun = 0.5340; }
-  else if ( fRunNum == 296191 ) { fLumiPerRun = 5.0507; }
-  else if ( fRunNum == 296192 ) { fLumiPerRun = 0.4974; }
-  else if ( fRunNum == 296194 ) { fLumiPerRun = 2.8725; }
-  else if ( fRunNum == 296195 ) { fLumiPerRun = 0.7376; }
-  else if ( fRunNum == 296196 ) { fLumiPerRun = 2.352;  }
-  else if ( fRunNum == 296197 ) { fLumiPerRun = 2.0691; }
-  else if ( fRunNum == 296198 ) { fLumiPerRun = 0.8140; }
-  else if ( fRunNum == 296241 ) { fLumiPerRun = 0.8459; }
-  else if ( fRunNum == 296242 ) { fLumiPerRun = 0.9517; }
-  else if ( fRunNum == 296243 ) { fLumiPerRun = 1.5674; }
-  else if ( fRunNum == 296244 ) { fLumiPerRun = 8.3722; }
-  else if ( fRunNum == 296246 ) { fLumiPerRun = 1.8351; }
-  else if ( fRunNum == 296247 ) { fLumiPerRun = 1.1765; }
+  else if ( fRunNum == 296142 ) { fLumiPerRun = 1.78935; }
+  else if ( fRunNum == 296143 ) { fLumiPerRun = 0.534028; }
+  else if ( fRunNum == 296191 ) { fLumiPerRun = 5.051; }
+  else if ( fRunNum == 296192 ) { fLumiPerRun = 0.497364; }
+  else if ( fRunNum == 296194 ) { fLumiPerRun = 2.84426; }
+  else if ( fRunNum == 296195 ) { fLumiPerRun = 0.737647; }
+  else if ( fRunNum == 296196 ) { fLumiPerRun = 2.42215; }
+  else if ( fRunNum == 296197 ) { fLumiPerRun = 2.07279; }
+  else if ( fRunNum == 296198 ) { fLumiPerRun = 0.813921; }
+  else if ( fRunNum == 296241 ) { fLumiPerRun = 0.845868; }
+  else if ( fRunNum == 296242 ) { fLumiPerRun = 0.95166; }
+  else if ( fRunNum == 296243 ) { fLumiPerRun = 1.56742; }
+  else if ( fRunNum == 296244 ) { fLumiPerRun = 8.37179; }
+  else if ( fRunNum == 296246 ) { fLumiPerRun = 1.82994; }
+  else if ( fRunNum == 296247 ) { fLumiPerRun = 1.1763; }
   else if ( fRunNum == 296269 ) { fLumiPerRun = 3.8392; }
-  else if ( fRunNum == 296270 ) { fLumiPerRun = 1.5116; }
-  else if ( fRunNum == 296273 ) { fLumiPerRun = 7.2237; }
-  else if ( fRunNum == 296279 ) { fLumiPerRun = 0.4057; }
-  else if ( fRunNum == 296280 ) { fLumiPerRun = 1.5066; }
-  else if ( fRunNum == 296303 ) { fLumiPerRun = 2.006;  }
-  else if ( fRunNum == 296304 ) { fLumiPerRun = 6.0965; }
-  else if ( fRunNum == 296307 ) { fLumiPerRun = 2.9023; }
-  else if ( fRunNum == 296309 ) { fLumiPerRun = 2.1026; }
-  else if ( fRunNum == 296312 ) { fLumiPerRun = 2.1228; }
-  else if ( fRunNum == 296377 ) { fLumiPerRun = 6.0666; }
-  else if ( fRunNum == 296378 ) { fLumiPerRun = 5.3897; }
-  else if ( fRunNum == 296379 ) { fLumiPerRun = 2.0969; }
-  else if ( fRunNum == 296380 ) { fLumiPerRun = 2.8820; }
-  else if ( fRunNum == 296381 ) { fLumiPerRun = 1.4418; }
-  else if ( fRunNum == 296383 ) { fLumiPerRun = 1.5136; }
-  else if ( fRunNum == 296414 ) { fLumiPerRun = 4.8766; }
-  else if ( fRunNum == 296419 ) { fLumiPerRun = 2.7523; }
-  else if ( fRunNum == 296420 ) { fLumiPerRun = 1.4132; }
-  else if ( fRunNum == 296423 ) { fLumiPerRun = 1.5981; }
-  else if ( fRunNum == 296424 ) { fLumiPerRun = 0.3864; }
-  else if ( fRunNum == 296433 ) { fLumiPerRun = 4.0456; }
-  else if ( fRunNum == 296472 ) { fLumiPerRun = 0.8632; }
-  else if ( fRunNum == 296509 ) { fLumiPerRun = 2.9592; }
-  else if ( fRunNum == 296510 ) { fLumiPerRun = 9.0673; }
-  else if ( fRunNum == 296511 ) { fLumiPerRun = 2.5666; }
-  else if ( fRunNum == 296514 ) { fLumiPerRun = 0.4898; }
-  else if ( fRunNum == 296516 ) { fLumiPerRun = 0.6134; }
-  else if ( fRunNum == 296547 ) { fLumiPerRun = 1.0834; }
-  else if ( fRunNum == 296548 ) { fLumiPerRun = 1.3771; }
-  else if ( fRunNum == 296549 ) { fLumiPerRun = 4.8645; }
-  else if ( fRunNum == 296550 ) { fLumiPerRun = 3.9901; }
-  else if ( fRunNum == 296551 ) { fLumiPerRun = 2.0214; }
-  else if ( fRunNum == 296552 ) { fLumiPerRun = 0.4842; }
-  else if ( fRunNum == 296553 ) { fLumiPerRun = 0.7091; }
-  else if ( fRunNum == 296615 ) { fLumiPerRun = 1.5676; }
-  else if ( fRunNum == 296616 ) { fLumiPerRun = 0.5399; }
-  else if ( fRunNum == 296618 ) { fLumiPerRun = 1.7014; }
-  else if ( fRunNum == 296619 ) { fLumiPerRun = 1.5613; }
-  else if ( fRunNum == 296622 ) { fLumiPerRun = 0.7064; }
-  else if ( fRunNum == 296623 ) { fLumiPerRun = 2.1442; }
-  else if ( fRunNum == 296690 ) { fLumiPerRun = 6.8615; }
-  else if ( fRunNum == 296691 ) { fLumiPerRun = 0.6511; }
-  else if ( fRunNum == 296694 ) { fLumiPerRun = 5.1826; }
-  else if ( fRunNum == 296749 ) { fLumiPerRun = 9.2413; }
-  else if ( fRunNum == 296750 ) { fLumiPerRun = 8.2161; }
-  else if ( fRunNum == 296781 ) { fLumiPerRun = 0.8179; }
-  else if ( fRunNum == 296784 ) { fLumiPerRun = 2.98;   }
+  else if ( fRunNum == 296270 ) { fLumiPerRun = 1.51158; }
+  else if ( fRunNum == 296273 ) { fLumiPerRun = 7.23985; }
+  else if ( fRunNum == 296279 ) { fLumiPerRun = 0.405692; }
+  else if ( fRunNum == 296280 ) { fLumiPerRun = 1.61122; }
+  else if ( fRunNum == 296303 ) { fLumiPerRun = 2.01567; }
+  else if ( fRunNum == 296304 ) { fLumiPerRun = 6.11939; }
+  else if ( fRunNum == 296307 ) { fLumiPerRun = 2.93104; }
+  else if ( fRunNum == 296309 ) { fLumiPerRun = 2.10255; }
+  else if ( fRunNum == 296312 ) { fLumiPerRun = 2.12718; }
+  else if ( fRunNum == 296377 ) { fLumiPerRun = 6.08141; }
+  else if ( fRunNum == 296378 ) { fLumiPerRun = 5.34678; }
+  else if ( fRunNum == 296379 ) { fLumiPerRun = 2.09698; }
+  else if ( fRunNum == 296380 ) { fLumiPerRun = 2.88934; }
+  else if ( fRunNum == 296381 ) { fLumiPerRun = 1.44081; }
+  else if ( fRunNum == 296383 ) { fLumiPerRun = 1.51276; }
+  else if ( fRunNum == 296414 ) { fLumiPerRun = 4.8759; }
+  else if ( fRunNum == 296419 ) { fLumiPerRun = 2.74845; }
+  else if ( fRunNum == 296420 ) { fLumiPerRun = 1.40973; }
+  else if ( fRunNum == 296423 ) { fLumiPerRun = 1.57873; }
+  else if ( fRunNum == 296424 ) { fLumiPerRun = 0.386229; }
+  else if ( fRunNum == 296433 ) { fLumiPerRun = 4.46674; }
+  else if ( fRunNum == 296472 ) { fLumiPerRun = 0.862237; }
+  else if ( fRunNum == 296509 ) { fLumiPerRun = 2.99727; }
+  else if ( fRunNum == 296510 ) { fLumiPerRun = 9.07207; }
+  else if ( fRunNum == 296511 ) { fLumiPerRun = 2.5694; }
+  else if ( fRunNum == 296514 ) { fLumiPerRun = 0.48925; }
+  else if ( fRunNum == 296516 ) { fLumiPerRun = 0.613001; }
+  else if ( fRunNum == 296547 ) { fLumiPerRun = 1.08314; }
+  else if ( fRunNum == 296548 ) { fLumiPerRun = 1.37636; }
+  else if ( fRunNum == 296549 ) { fLumiPerRun = 4.86114; }
+  else if ( fRunNum == 296550 ) { fLumiPerRun = 3.96203; }
+  else if ( fRunNum == 296551 ) { fLumiPerRun = 2.02168; }
+  else if ( fRunNum == 296552 ) { fLumiPerRun = 0.483545; }
+  else if ( fRunNum == 296553 ) { fLumiPerRun = 0.707355; }
+  else if ( fRunNum == 296615 ) { fLumiPerRun = 1.56721; }
+  else if ( fRunNum == 296616 ) { fLumiPerRun = 0.53916; }
+  else if ( fRunNum == 296618 ) { fLumiPerRun = 2.28102; }
+  else if ( fRunNum == 296619 ) { fLumiPerRun = 1.5574; }
+  else if ( fRunNum == 296622 ) { fLumiPerRun = 0.703628; }
+  else if ( fRunNum == 296623 ) { fLumiPerRun = 2.16132; }
+  else if ( fRunNum == 296690 ) { fLumiPerRun = 6.55512; }
+  else if ( fRunNum == 296691 ) { fLumiPerRun = 0.651063; }
+  else if ( fRunNum == 296694 ) { fLumiPerRun = 5.02114; }
+  else if ( fRunNum == 296749 ) { fLumiPerRun = 9.27577; }
+  else if ( fRunNum == 296750 ) { fLumiPerRun = 8.21552; }
+  else if ( fRunNum == 296781 ) { fLumiPerRun = 0.817883; }
+  else if ( fRunNum == 296784 ) { fLumiPerRun = 3.0019; }
   else if ( fRunNum == 296785 ) { fLumiPerRun = 1.9085; }
-  else if ( fRunNum == 296786 ) { fLumiPerRun = 0.7537; }
-  else if ( fRunNum == 296787 ) { fLumiPerRun = 3.2190; }
-  else if ( fRunNum == 296791 ) { fLumiPerRun = 0.7573; }
-  else if ( fRunNum == 296793 ) { fLumiPerRun = 1.3317; }
-  else if ( fRunNum == 296794 ) { fLumiPerRun = 3.1335; }
-  else if ( fRunNum == 296799 ) { fLumiPerRun = 2.7149; }
-  else if ( fRunNum == 296836 ) { fLumiPerRun = 1.5116; }
-  else if ( fRunNum == 296838 ) { fLumiPerRun = 0.5432; }
-  else if ( fRunNum == 296839 ) { fLumiPerRun = 2.9424; }
-  else if ( fRunNum == 296848 ) { fLumiPerRun = 2.1628; }
-  else if ( fRunNum == 296849 ) { fLumiPerRun = 11.469; }
-  else if ( fRunNum == 296850 ) { fLumiPerRun = 2.7979; }
-  else if ( fRunNum == 296851 ) { fLumiPerRun = 0.1392; }
-  else if ( fRunNum == 296852 ) { fLumiPerRun = 0.9565; }
-  else if ( fRunNum == 296890 ) { fLumiPerRun = 8.0545; }
-  else if ( fRunNum == 296894 ) { fLumiPerRun = 4.6472; }
-  else if ( fRunNum == 296899 ) { fLumiPerRun = 2.1355; }
-  else if ( fRunNum == 296900 ) { fLumiPerRun = 2.7833; }
-  else if ( fRunNum == 296903 ) { fLumiPerRun = 1.0391; }
-  else if ( fRunNum == 296930 ) { fLumiPerRun = 1.4575; }
-  else if ( fRunNum == 296931 ) { fLumiPerRun = 0.5292; }
-  else if ( fRunNum == 296932 ) { fLumiPerRun = 1.1863; }
-  else if ( fRunNum == 296934 ) { fLumiPerRun = 2.5917; }
-  else if ( fRunNum == 296935 ) { fLumiPerRun = 4.4039; }
-  else if ( fRunNum == 296938 ) { fLumiPerRun = 1.6678; }
-  else if ( fRunNum == 296941 ) { fLumiPerRun = 2.9181; }
-  else if ( fRunNum == 296966 ) { fLumiPerRun = 3.3611; }
-  else if ( fRunNum == 296967 ) { fLumiPerRun = 0.8051; }
-  else if ( fRunNum == 296968 ) { fLumiPerRun = 3.1905; }
-  else if ( fRunNum == 296969 ) { fLumiPerRun = 1.8878; }
-  else if ( fRunNum == 296971 ) { fLumiPerRun = 0.6907; }
-  else if ( fRunNum == 296975 ) { fLumiPerRun = 7.3683; }
-  else if ( fRunNum == 296976 ) { fLumiPerRun = 1.1175; }
-  else if ( fRunNum == 296979 ) { fLumiPerRun = 1.0995; }
-  else if ( fRunNum == 297029 ) { fLumiPerRun = 7.2370; }
-  else if ( fRunNum == 297031 ) { fLumiPerRun = 6.0499; }
-  else if ( fRunNum == 297035 ) { fLumiPerRun = 0.5705; }
-  else if ( fRunNum == 297085 ) { fLumiPerRun = 0.9774; }
-  else if ( fRunNum == 297117 ) { fLumiPerRun = 2.3096; }
-  else if ( fRunNum == 297118 ) { fLumiPerRun = 2.43;   }
-  else if ( fRunNum == 297119 ) { fLumiPerRun = 2.6870; }
-  else if ( fRunNum == 297123 ) { fLumiPerRun = 3.2804; }
-  else if ( fRunNum == 297124 ) { fLumiPerRun = 0.6395; }
-  else if ( fRunNum == 297128 ) { fLumiPerRun = 2.411;  }
-  else if ( fRunNum == 297129 ) { fLumiPerRun = 2.8300; }
-  else if ( fRunNum == 297132 ) { fLumiPerRun = 2.8179; }
-  else if ( fRunNum == 297133 ) { fLumiPerRun = 1.1454; }
-  else if ( fRunNum == 297193 ) { fLumiPerRun = 7.5602; }
-  else if ( fRunNum == 297194 ) { fLumiPerRun = 8.8428; }
+  else if ( fRunNum == 296786 ) { fLumiPerRun = 0.753734; }
+  else if ( fRunNum == 296787 ) { fLumiPerRun = 3.24915; }
+  else if ( fRunNum == 296791 ) { fLumiPerRun = 0.757278; }
+  else if ( fRunNum == 296793 ) { fLumiPerRun = 1.39522; }
+  else if ( fRunNum == 296794 ) { fLumiPerRun = 3.13783; }
+  else if ( fRunNum == 296799 ) { fLumiPerRun = 2.77608; }
+  else if ( fRunNum == 296836 ) { fLumiPerRun = 1.51136; }
+  else if ( fRunNum == 296838 ) { fLumiPerRun = 0.542885; }
+  else if ( fRunNum == 296839 ) { fLumiPerRun = 2.95419; }
+  else if ( fRunNum == 296848 ) { fLumiPerRun = 2.19145; }
+  else if ( fRunNum == 296849 ) { fLumiPerRun = 11.8282; }
+  else if ( fRunNum == 296850 ) { fLumiPerRun = 2.8369; }
+  else if ( fRunNum == 296851 ) { fLumiPerRun = 0.890021; }
+  else if ( fRunNum == 296852 ) { fLumiPerRun = 0.948014; }
+  else if ( fRunNum == 296890 ) { fLumiPerRun = 6.96187; }
+  else if ( fRunNum == 296894 ) { fLumiPerRun = 4.47163; }
+  else if ( fRunNum == 296899 ) { fLumiPerRun = 2.11682; }
+  else if ( fRunNum == 296900 ) { fLumiPerRun = 2.78312; }
+  else if ( fRunNum == 296903 ) { fLumiPerRun = 1.03903; }
+  else if ( fRunNum == 296930 ) { fLumiPerRun = 1.42317; }
+  else if ( fRunNum == 296931 ) { fLumiPerRun = 0.528865; }
+  else if ( fRunNum == 296932 ) { fLumiPerRun = 1.19931; }
+  else if ( fRunNum == 296934 ) { fLumiPerRun = 2.62967; }
+  else if ( fRunNum == 296935 ) { fLumiPerRun = 4.49271; }
+  else if ( fRunNum == 296938 ) { fLumiPerRun = 1.65053; }
+  else if ( fRunNum == 296941 ) { fLumiPerRun = 2.93132; }
+  else if ( fRunNum == 296966 ) { fLumiPerRun = 3.37409; }
+  else if ( fRunNum == 296967 ) { fLumiPerRun = 0.804596; }
+  else if ( fRunNum == 296968 ) { fLumiPerRun = 3.18308; }
+  else if ( fRunNum == 296969 ) { fLumiPerRun = 1.88784; }
+  else if ( fRunNum == 296971 ) { fLumiPerRun = 0.6895; }
+  else if ( fRunNum == 296975 ) { fLumiPerRun = 7.47159; }
+  else if ( fRunNum == 296976 ) { fLumiPerRun = 1.11722; }
+  else if ( fRunNum == 296979 ) { fLumiPerRun = 1.09943; }
+  else if ( fRunNum == 297029 ) { fLumiPerRun = 7.20294; }
+  else if ( fRunNum == 297031 ) { fLumiPerRun = 5.94515; }
+  else if ( fRunNum == 297035 ) { fLumiPerRun = 1.30617; }
+  else if ( fRunNum == 297085 ) { fLumiPerRun = 0.977753; }
+  else if ( fRunNum == 297117 ) { fLumiPerRun = 2.34892; }
+  else if ( fRunNum == 297118 ) { fLumiPerRun = 2.44282; }
+  else if ( fRunNum == 297119 ) { fLumiPerRun = 2.68704; }
+  else if ( fRunNum == 297123 ) { fLumiPerRun = 3.3714; }
+  else if ( fRunNum == 297124 ) { fLumiPerRun = 0.639463; }
+  else if ( fRunNum == 297128 ) { fLumiPerRun = 2.41074; }
+  else if ( fRunNum == 297129 ) { fLumiPerRun = 2.82995; }
+  else if ( fRunNum == 297132 ) { fLumiPerRun = 2.81789; }
+  else if ( fRunNum == 297133 ) { fLumiPerRun = 1.16976; }
+  else if ( fRunNum == 297193 ) { fLumiPerRun = 7.64123; }
+  else if ( fRunNum == 297194 ) { fLumiPerRun = 9.86729; }
   else if ( fRunNum == 297196 ) { fLumiPerRun = 2.1255; }
-  else if ( fRunNum == 297218 ) { fLumiPerRun = 6.42;   }
-  else if ( fRunNum == 297219 ) { fLumiPerRun = 10.531; }
-  else if ( fRunNum == 297221 ) { fLumiPerRun = 2.8309; }
-  else if ( fRunNum == 297222 ) { fLumiPerRun = 1.7175; }
-  else if ( fRunNum == 297278 ) { fLumiPerRun = 0.6019; }
-  else if ( fRunNum == 297310 ) { fLumiPerRun = 0.6701; }
-  else if ( fRunNum == 297312 ) { fLumiPerRun = 2.4002; }
-  else if ( fRunNum == 297315 ) { fLumiPerRun = 7.8271; }
-  else if ( fRunNum == 297317 ) { fLumiPerRun = 4.3148; }
-  else if ( fRunNum == 297363 ) { fLumiPerRun = 1.9122; }
-  else if ( fRunNum == 297366 ) { fLumiPerRun = 2.1293; }
-  else if ( fRunNum == 297367 ) { fLumiPerRun = 3.1548; }
-  else if ( fRunNum == 297372 ) { fLumiPerRun = 3.2003; }
-  else if ( fRunNum == 297379 ) { fLumiPerRun = 6.8050; }
-  else if ( fRunNum == 297380 ) { fLumiPerRun = 1.5488; }
-  else if ( fRunNum == 297405 ) { fLumiPerRun = 0.6007; }
-  else if ( fRunNum == 297408 ) { fLumiPerRun = 4.1021; }
-  else if ( fRunNum == 297413 ) { fLumiPerRun = 2.9907; }
-  else if ( fRunNum == 297414 ) { fLumiPerRun = 2.2140; }
-  else if ( fRunNum == 297415 ) { fLumiPerRun = 6.8227; }
-  else if ( fRunNum == 297441 ) { fLumiPerRun = 5.0556; }
-  else if ( fRunNum == 297442 ) { fLumiPerRun = 1.9878; }
-  else if ( fRunNum == 297446 ) { fLumiPerRun = 8.1326; }
-  else if ( fRunNum == 297450 ) { fLumiPerRun = 1.9518; }
-  else if ( fRunNum == 297451 ) { fLumiPerRun = 1.3327; }
-  else if ( fRunNum == 297452 ) { fLumiPerRun = 1.1512; }
-  else if ( fRunNum == 297479 ) { fLumiPerRun = 7.7463; }
-  else if ( fRunNum == 297481 ) { fLumiPerRun = 10.645; }
-  else if ( fRunNum == 297483 ) { fLumiPerRun = 1.9505; }
-  else if ( fRunNum == 297512 ) { fLumiPerRun = 1.5848; }
-  else if ( fRunNum == 297537 ) { fLumiPerRun = 1.8096; }
-  else if ( fRunNum == 297540 ) { fLumiPerRun = 0.6286; }
-  else if ( fRunNum == 297541 ) { fLumiPerRun = 4.0120; }
-  else if ( fRunNum == 297542 ) { fLumiPerRun = 1.5362; }
-  else if ( fRunNum == 297544 ) { fLumiPerRun = 7.2900; }
-  else if ( fRunNum == 297558 ) { fLumiPerRun = 0.4783; }
-  else if ( fRunNum == 297588 ) { fLumiPerRun = 5.2912; }
-  else if ( fRunNum == 297590 ) { fLumiPerRun = 3.06;   }
+  else if ( fRunNum == 297218 ) { fLumiPerRun = 6.39259; }
+  else if ( fRunNum == 297219 ) { fLumiPerRun = 9.29989; }
+  else if ( fRunNum == 297221 ) { fLumiPerRun = 2.83193; }
+  else if ( fRunNum == 297222 ) { fLumiPerRun = 1.69325; }
+  else if ( fRunNum == 297278 ) { fLumiPerRun = 0.601609; }
+  else if ( fRunNum == 297310 ) { fLumiPerRun = 0.670071; }
+  else if ( fRunNum == 297312 ) { fLumiPerRun = 2.40205; }
+  else if ( fRunNum == 297315 ) { fLumiPerRun = 7.93229; }
+  else if ( fRunNum == 297317 ) { fLumiPerRun = 4.31559; }
+  else if ( fRunNum == 297363 ) { fLumiPerRun = 1.89669; }
+  else if ( fRunNum == 297366 ) { fLumiPerRun = 2.05394; }
+  else if ( fRunNum == 297367 ) { fLumiPerRun = 3.11285; }
+  else if ( fRunNum == 297372 ) { fLumiPerRun = 3.22421; }
+  else if ( fRunNum == 297379 ) { fLumiPerRun = 6.92989; }
+  else if ( fRunNum == 297380 ) { fLumiPerRun = 1.46125; }
+  else if ( fRunNum == 297405 ) { fLumiPerRun = 0.51899; }
+  else if ( fRunNum == 297408 ) { fLumiPerRun = 4.05969; }
+  else if ( fRunNum == 297413 ) { fLumiPerRun = 2.99189; }
+  else if ( fRunNum == 297414 ) { fLumiPerRun = 2.21433; }
+  else if ( fRunNum == 297415 ) { fLumiPerRun = 6.76725; }
+  else if ( fRunNum == 297441 ) { fLumiPerRun = 4.92805; }
+  else if ( fRunNum == 297442 ) { fLumiPerRun = 1.98748; }
+  else if ( fRunNum == 297446 ) { fLumiPerRun = 8.1332; }
+  else if ( fRunNum == 297450 ) { fLumiPerRun = 1.95205; }
+  else if ( fRunNum == 297451 ) { fLumiPerRun = 1.33275; }
+  else if ( fRunNum == 297452 ) { fLumiPerRun = 1.15124; }
+  else if ( fRunNum == 297479 ) { fLumiPerRun = 7.71966; }
+  else if ( fRunNum == 297481 ) { fLumiPerRun = 9.55402; }
+  else if ( fRunNum == 297483 ) { fLumiPerRun = 1.99555; }
+  else if ( fRunNum == 297512 ) { fLumiPerRun = 1.5838; }
+  else if ( fRunNum == 297537 ) { fLumiPerRun = 1.80636; }
+  else if ( fRunNum == 297540 ) { fLumiPerRun = 0.628094; }
+  else if ( fRunNum == 297541 ) { fLumiPerRun = 3.96702; }
+  else if ( fRunNum == 297542 ) { fLumiPerRun = 1.5516; }
+  else if ( fRunNum == 297544 ) { fLumiPerRun = 7.29158; }
+  else if ( fRunNum == 297558 ) { fLumiPerRun = 0.478978; }
+  else if ( fRunNum == 297588 ) { fLumiPerRun = 5.26723; }
+  else if ( fRunNum == 297590 ) { fLumiPerRun = 3.14808; }
+  else if ( fRunNum == 297595 ) { fLumiPerRun = 0.0; }
+
 
 }

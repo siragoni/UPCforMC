@@ -6,3 +6,6 @@ AliAnalysisTaskUPCforwardMC_*
 
 #  -  Ignore the AnalysisResults
 AnalysisResults*
+
+*.xml
+MC*

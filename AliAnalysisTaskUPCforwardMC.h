@@ -257,8 +257,12 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  *
                                  * Rapidity bin study too.
                                  */
-        TH1F*                   fTemplatePtDistributionH;              //!
-        TH1F*                   fTemplatePtDistributionRapidityH[3];   //!
+        TH1F*                   fTemplatePtDistributionH;                       //!
+        TH1F*                   fTemplatePtDistributionRapidityH[3];            //!
+        TH1F*                   fTemplatePtDistributionHLowerSide;              //!
+        TH1F*                   fTemplatePtDistributionRapidityHLowerSide[3];   //!
+        TH1F*                   fTemplatePtDistributionHHigherSide;             //!
+        TH1F*                   fTemplatePtDistributionRapidityHHigherSide[3];  //!
 
                                 /**
                                  * This histogram records the invariant mass
@@ -972,7 +976,8 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * fMCEfficiencyPerRunH to extract the
                                  * efficiency on a run-by-run basis.
                                  */
-        TH1F*                   fEfficiencyPerRunH;  //!
+        TH1F*                   fEfficiencyPerRunH;             //!
+        TH1F*                   fEfficiencyPerRunRapidityH[6];  //!
 
                                 /**
                                  * This histogram shows the entries distribution
@@ -984,7 +989,8 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * and I forgot to eliminate  the comment
                                  * from here....
                                  */
-        TH1F*                   fMCEfficiencyPerRunH;  //!
+        TH1F*                   fMCEfficiencyPerRunH;             //!
+        TH1F*                   fMCEfficiencyPerRunRapidityH[6];  //!
 
                                 /**
                                  * This array of histograms shows the
@@ -1252,7 +1258,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 33);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 35);
 };
 
 #endif

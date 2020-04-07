@@ -10,73 +10,89 @@
 // pcm file, so we need to include it explicitly
 #include "AliAnalysisTaskUPCforwardMC.h"
 
-void runAnalysis(Int_t opt, Int_t isMC = 0)
-// opt = 0; 2018 q
-// opt = 1; 2018 r
+void runAnalysis(Int_t opt)
 {
-  Int_t listOfGoodRunNumLHC18qIsMC[] = { 295585, 295586, 295587, 295588, 295589, 295612,
-                                         295615, 295665, 295666, 295667, 295668, 295671,
-                                         295673, 295675, 295676, 295677, 295714, 295716,
-                                         295717, 295718, 295719, 295723, 295725, 295753,
-                                         295754, 295755, 295758, 295759, 295762, 295763,
-                                         295786, 295788, 295791, 295816, 295818, 295819,
-                                         295822, 295825, 295826, 295829, 295831, 295854,
-                                         295855, 295856, 295859, 295860, 295861, 295863,
-                                         295881, 295908, 295909, 295910, 295913, 295936,
-                                         295937, 295941, 295942, 295943, 295945, 295947,
-                                         296061, 296062, 296063, 296065, 296066, 296068,
-                                         296123, 296128, 296132, 296133, 296134, 296135,
-                                         296142, 296143, 296191, 296192, 296194, 296195,
-                                         296196, 296197, 296198, 296241, 296242, 296243,
-                                         296244, 296246, 296247, 296269, 296270, 296273,
-                                         296279, 296280, 296303, 296304, 296307, 296309,
-                                         296312, 296376, 296377, 296378, 296379, 296380,
-                                         296381, 296383, 296414, 296419, 296420, 296423,
-                                         296424, 296433, 296472, 296509, 296510, 296511,
-                                         296514, 296516, 296547, 296548, 296549, 296550,
-                                         296551, 296552, 296553, 296615, 296616, 296618,
-                                         296619, 296622, 296623 };
-  Int_t listOfGoodRunNumLHC18rIsMC[] = { 296690, 296691, 296694, 296749, 296750, 296781,
-                                         296784, 296785, 296786, 296787, 296791, 296793,
-                                         296794, 296799, 296836, 296838, 296839, 296848,
-                                         296849, 296850, 296851, 296852, 296890, 296894,
-                                         296899, 296900, 296903, 296930, 296931, 296932,
-                                         296934, 296935, 296938, 296941, 296966, 296967,
-                                         296968, 296969, 296971, 296975, 296976, 296977,
-                                         296979, 297029, 297031, 297035, 297085, 297117,
-                                         297118, 297119, 297123, 297124, 297128, 297129,
-                                         297132, 297133, 297193, 297194, 297196, 297218,
-                                         297219, 297221, 297222, 297278, 297310, 297312,
-                                         297315, 297317, 297363, 297366, 297367, 297372,
-                                         297379, 297380, 297405, 297408, 297413, 297414,
-                                         297415, 297441, 297442, 297446, 297450, 297451,
-                                         297452, 297479, 297481, 297483, 297512, 297537,
-                                         297540, 297541, 297542, 297544, 297558, 297588,
-                                         297590, 297595, 297623, 297624 };
-  Int_t sizeOfLHC18qIsMC = 0;
-  Int_t sizeOfLHC18rIsMC = 0;
+
+
   /**
-   * This is the vector containing the GOOD RunNumbers.
+   * RUN ON LOCAL:
    */
-  std::vector<Int_t> fVectorGoodRunNumbersIsMC;
-  for ( Int_t GoodRunNumberLHC18qIsMC : listOfGoodRunNumLHC18qIsMC ) {
-    fVectorGoodRunNumbersIsMC.push_back(GoodRunNumberLHC18qIsMC);
-    sizeOfLHC18qIsMC++;
-  }
-  for ( Int_t GoodRunNumberLHC18rIsMC : listOfGoodRunNumLHC18rIsMC ) {
-    fVectorGoodRunNumbersIsMC.push_back(GoodRunNumberLHC18rIsMC);
-    sizeOfLHC18rIsMC++;
-  }
+  // Bool_t local    = kTRUE;
+  // Bool_t gridTest = kFALSE;
+
+  /**
+   * RUN ON GRIDTEST:
+   */
+  // Bool_t local    = kFALSE;
+  // Bool_t gridTest = kTRUE;
+
+
+  /**
+   * FULL GRID MOD:
+   */
+  Bool_t local    = kFALSE;
+  Bool_t gridTest = kFALSE;
 
 
 
+  Int_t listOfGoodRunNumbersLHC18l7[] = { 295585, 295586, 295587, 295588, 295589, 295612,
+                                          295615, 295665, 295666, 295667, 295668, 295671,
+                                          295673, 295675, 295676, 295677, 295714, 295716,
+                                          295717, 295718, 295719, 295723, 295725, 295753,
+                                          295754, 295755, 295758, 295759, 295762, 295763,
+                                          295786, 295788, 295791, 295816, 295818, 295819,
+                                          295822, 295825, 295826, 295829, 295831, 295854,
+                                          295855, 295856, 295859, 295860, 295861, 295863,
+                                          295881, 295908, 295909, 295910, 295913, 295936,
+                                          295937, 295941, 295942, 295943, 295945, 295947, // 60
+                                          296061, 296062, 296063, 296065, 296066, 296068,
+                                          296123, 296128, 296132, 296133, 296134, 296135,
+                                          296142, 296143, 296191, 296192, 296194, 296195,
+                                          296196, 296197, 296198, 296241, 296242, 296243,
+                                          296244, 296246, 296247, 296269, 296270, 296273,
+                                          296279, 296280, 296303, 296304, 296307, 296309,
+                                          296312, 296376, 296377, 296378, 296379, 296380,
+                                          296381, 296383, 296414, 296419, 296420, 296423,
+                                          296424, 296433, 296472, 296509, 296510, 296511,
+                                          296514, 296516, 296547, 296548, 296549, 296550, // 60
+                                          296551, 296552, 296553, 296615, 296616, 296618,
+                                          296619, 296622, 296623, // end 18q MC
+                                          296690, 296691, 296694, 296749, 296750, 296781,
+                                          296784, 296785, 296786, 296787, 296791, 296793,
+                                          296794, 296799, 296836, 296838, 296839, 296848,
+                                          296849, 296850, 296851, 296852, 296890, 296894,
+                                          296899, 296900, 296903, 296930, 296931, 296932,
+                                          296934, 296935, 296938, 296941, 296966, 296967,
+                                          296968, 296969, 296971, 296975, 296976, 296977,
+                                          296979, 297029, 297031, 297035, 297085, 297117, // 57
+                                          297118, 297119, 297123, 297124, 297128, 297129,
+                                          297132, 297133, 297193, 297194, 297196, 297218,
+                                          297219, 297221, 297222, 297278, 297310, 297312,
+                                          297315, 297317, 297363, 297366, 297367, 297372,
+                                          297379, 297380, 297405, 297408, 297413, 297414,
+                                          297415, 297441, 297442, 297446, 297450, 297451,
+                                          297452, 297479, 297481, 297483, 297512, 297537,
+                                          297540, 297541, 297542, 297544, 297558, 297588,
+                                          297590, 297595, 297623, 297624 };               // 52  = 229
 
-    // set if you want to run the analysis locally (kTRUE), or on grid (kFALSE)
-    // Bool_t local = kFALSE;
-    Bool_t local = kTRUE;
-    // if you run on grid, specify test mode (kTRUE) or full grid model (kFALSE)
-    Bool_t gridTest = kFALSE;
-    // Bool_t gridTest = kTRUE;
+
+
+  // Int_t listOfGoodRunNumbersLHC15o[] = { /*244918,*/ 244980, 244982, 244983, 245064, 245066, 245068, 245145, 245146, 245151,
+  //                                        245152, 245231, 245232, 245233, 245253, 245259, 245343, 245345, 245346, 245347,
+  //                                        245353, 245401, 245407, 245409, 245410, 245446, 245450, 245496, 245501, 245504,
+  //                                        245505, 245507, 245535, 245540, 245542, 245543, 245554, 245683, 245692, 245700,
+  //                                        245705, 245729, 245731, 245738, 245752, 245759, 245766, 245775, 245785, 245793,
+  //                                        245829, 245831, 245833, 245949, 245952, 245954, 245963, 245996, 246001, 246003,
+  //                                        246012, 246036, 246037, 246042, 246048, 246049, 246053, 246087, 246089, 246113,
+  //                                        246115, 246148, 246151, 246152, 246153, 246178, 246181, 246182, 246217, 246220,
+  //                                        246222, 246225, 246272, 246275, 246276, 246390, 246391, 246392, 246424, 246428,
+  //                                        246431, 246433, 246434, 246487, 246488, 246493, 246495, 246675, 246676, 246750,
+  //                                        246751, 246755, 246757, 246758, 246759, 246760, 246763, 246765, 246804, 246805,
+  //                                        246806, 246807, 246808, 246809, 246844, 246845, 246846, 246847, 246851, 246855,
+  //                                        246859, 246864, 246865, 246867, 246871, 246930, 246937, 246942, 246945, 246948,
+  //                                        246949, 246980, 246982, 246984, 246989, 246991, 246994       //136
+  //                                      };
+
 
     // since we will compile a class, tell root where to look for headers
 #if !defined (__CINT__) || defined (__CLING__)
@@ -155,54 +171,54 @@ void runAnalysis(Int_t opt, Int_t isMC = 0)
         // set the Alien API version
         alienHandler->SetAPIVersion("V1.1x");
         // select the input data for 2018 q
-	// for 2018 q	/alice/data/2018/LHC18q/000296510/muon_calo_pass2/PWGUD/UD_PbPb_AOD/421_20190103-1942/
-	// for 2018 r  /alice/data/2018/LHC18r/000296849/muon_calo_pass2/PWGUD/UD_PbPb_AOD/423_20190104-1437/
-  	if (opt == 0) {
-  	  alienHandler->SetGridDataDir("/alice/data/2018/LHC18q");
-  	  alienHandler->SetDataPattern("*muon_calo_pass2/PWGUD/UD_PbPb_AOD/425_20190111-1316/*AliAOD.UPCNano.root");
-  	  // MC has no prefix, data has prefix 000
-  	  alienHandler->SetRunPrefix("000");
-  	  // runnumber
-  	  alienHandler->AddRunNumber(296510);
-  	} else if (opt == 1) {
-  	  alienHandler->SetGridDataDir("/alice/data/2018/LHC18r");
-  	  alienHandler->SetDataPattern("*muon_calo_pass2/PWGUD/UD_PbPb_AOD/426_20190111-1316/*AliAOD.UPCNano.root");
-  	  // MC has no prefix, data has prefix 000
-  	  alienHandler->SetRunPrefix("000");
-  	  // runnumber
-  	  alienHandler->AddRunNumber(296849);
-  	} else {
-  	  cout << " not a valid option ... bye!" << endl;
-  	}
+
+
+
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
+      alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
+  	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  229; iRunLHC18l7++){
+      // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
+        alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
+      }
+
+
+
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
+  	  // alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      // for( Int_t iRunLHC15o = 0; iRunLHC15o < 136; iRunLHC15o++){
+      //   if( fRunNum == listOfGoodRunNumbersLHC15o[iRunLHC15o] ) checkIfGoodRun = kTRUE;
+      //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC15o[iRunLHC15o] );
+      // }
+
+
+
 
         // number of files per subjob
-        alienHandler->SetSplitMaxInputFileNumber(10);
-        alienHandler->SetExecutable("myTask.sh");
+        alienHandler->SetSplitMaxInputFileNumber(50);
+        alienHandler->SetExecutable("MC.sh");
         // specify how many seconds your job may take
         alienHandler->SetTTL(10000);
-        alienHandler->SetJDLName("myTask.jdl");
+        alienHandler->SetJDLName("MC.jdl");
 
         alienHandler->SetOutputToRunNo(kTRUE);
         alienHandler->SetKeepLogs(kTRUE);
         // merging: run with "kTRUE" and "full" for normal run
         // to merge on grid run jobs in SetRunMode("terminate")
         // to collect final results set SetMergeViaJDL(kFALSE)
-        alienHandler->SetMergeViaJDL(kTRUE);
+        // alienHandler->SetMergeViaJDL(kTRUE);
 
         /* - The setting to kFALSE is to download the output files
            -
          */
-        // alienHandler->SetMergeViaJDL(kFALSE);
+        alienHandler->SetMergeViaJDL(kFALSE);
         alienHandler->SetMaxMergeStages(1);
 
 
-        TString LHC18q("LHC18q");
-        TString LHC18r("LHC18r");
+        TString LHC18l7("LHC18l7");
         // define the output folders
-        alienHandler->SetGridWorkingDir("myWorkingDir");
-        // alienHandler->SetGridOutputDir("myOutputDir");
-        if (opt == 0) alienHandler->SetGridOutputDir(LHC18q.Data());
-        if (opt == 1) alienHandler->SetGridOutputDir(LHC18r.Data());
+        alienHandler->SetGridWorkingDir("MC_polarisation_flat_LHC18l7");
+        alienHandler->SetGridOutputDir(LHC18l7.Data());
 
 
 
@@ -220,21 +236,21 @@ void runAnalysis(Int_t opt, Int_t isMC = 0)
             /* - The option FULL is to send the full analysis.
                -
              */
-            alienHandler->SetRunMode("full");
+            // alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            // alienHandler->SetRunMode("terminate");
+            alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
 }
 
-/*
-Welcome my dear ALICE user! To use ALICE software from CVMFS:
- * List all packages         --> alienv q
- * List AliPhysics packages  --> alienv q | grep -i aliphysics
- * Enable a specific package --> alienv enter VO_ALICE@AliPhysics::vAN-20190114_ROOT6-1
- * Enable multiple packages  --> alienv enter VO_ALICE@AliPhysics::vAN-20190114_ROOT6-1,VO_ALICE@fastjet::v3.2.1_1.024-alice3-7
+/* -
+ * - Welcome my dear ALICE user! To use ALICE software from CVMFS:
+ * - List all packages         --> alienv q
+ * - List AliPhysics packages  --> alienv q | grep -i aliphysics
+ * - Enable a specific package --> alienv enter VO_ALICE@AliPhysics::vAN-20190114_ROOT6-1
+ * - Enable multiple packages  --> alienv enter VO_ALICE@AliPhysics::vAN-20190114_ROOT6-1,VO_ALICE@fastjet::v3.2.1_1.024-alice3-7
  */
