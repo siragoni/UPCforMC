@@ -10,7 +10,7 @@
 // pcm file, so we need to include it explicitly
 #include "AliAnalysisTaskUPCforwardMC.h"
 
-void runAnalysis(Int_t opt)
+void runAnalysisLHC18l7onMichal(Int_t opt)
 {
 
 
@@ -174,18 +174,26 @@ void runAnalysis(Int_t opt)
 
 
 
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
-      alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
+      alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
   	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
-      for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  229; iRunLHC18l7++){
-        // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
-        // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
-        alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
-      }
+      // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  229; iRunLHC18l7++){
+      //   // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
+      //   // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
+      //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
+      // }
 
       // alienHandler->AddRunNumber(296377);
+
+
+
+      // alienHandler->SetGridDataDir("/alice/cern.ch/user/m/mbroz/DPGProd/output/");
+      // alienHandler->SetDataPattern("*AliAOD.root");
+      alienHandler->AddRunNumber(297194);
+
+
 
 
 
@@ -223,7 +231,7 @@ void runAnalysis(Int_t opt)
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC18l7_incohpolarisation");
+        alienHandler->SetGridWorkingDir("MC_LHC18l7_coh_Michal_2");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 
