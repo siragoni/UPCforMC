@@ -171,6 +171,7 @@ void runAnalysis(Int_t opt)
         // set the Alien API version
         alienHandler->SetAPIVersion("V1.1x");
         // select the input data for 2018 q
+        alienHandler->SetCheckCopy(kFALSE);
 
 
 
@@ -181,7 +182,7 @@ void runAnalysis(Int_t opt)
       alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuLP/");
       // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuNP/");
   	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
-      for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  229; iRunLHC18l7++){
+      for( Int_t iRunLHC18l7 = 20; iRunLHC18l7 <  229; iRunLHC18l7++){
         // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
         // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
         alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
@@ -225,7 +226,7 @@ void runAnalysis(Int_t opt)
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC18l7_longpolarisation9");
+        alienHandler->SetGridWorkingDir("MC_LHC18l7_longpolarisation10");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 
@@ -245,12 +246,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            alienHandler->SetRunMode("full");
+            // alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            // alienHandler->SetRunMode("terminate");
+            alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
