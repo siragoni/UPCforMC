@@ -3724,6 +3724,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
     Double_t phi    = mcParticle->Phi();
     Short_t  charge = mcParticle->Charge();
     Int_t    pdg    = mcParticle->PdgCode();
+    if (  (pdg > 21) && (pdg < 24) ) {
+      PostData(1, fOutputList);
+      return;
+    }
     fMCpdgCodesH->Fill( Form("%d", pdg) , 1 );
     if ( mcParticle->IsPrimary() ) fMCpdgCodesOnlyPrimaryH->Fill( Form("%d", pdg) , 1 );
     fMCphiGeneratedTruthH           ->Fill(phi);
