@@ -3717,7 +3717,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
       AliError(Form("Could not receive track %d", iPart));
       continue;
     }
-    if (  mcParticle->Charge()    == 0) continue;
+    // if (  mcParticle->Charge()    == 0) continue;
     Double_t pT     = mcParticle->Pt();
     Double_t eta    = mcParticle->Eta();
     Double_t pseudo = mcParticle->Y();
