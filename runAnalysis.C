@@ -193,7 +193,8 @@ void runAnalysis(Int_t opt)
 
 
       // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2a/");
-      alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2i/");
+      // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2i/");
+      alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2j/");
   	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
       // for( Int_t iRunLHC15o = 0; iRunLHC15o < 136; iRunLHC15o++){
       //   // if( fRunNum == listOfGoodRunNumbersLHC15o[iRunLHC15o] ) checkIfGoodRun = kTRUE;
@@ -248,12 +249,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            alienHandler->SetRunMode("full");
+            // alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            // alienHandler->SetRunMode("terminate");
+            alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
