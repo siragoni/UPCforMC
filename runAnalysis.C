@@ -175,31 +175,33 @@ void runAnalysis(Int_t opt)
 
 
 
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
       // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuLP/");
-      alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuNP/");
-  	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
-      for( Int_t iRunLHC18l7 = 20; iRunLHC18l7 <  229; iRunLHC18l7++){
-        // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
-        // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
-        alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
-      }
-
-      // alienHandler->AddRunNumber(296377);
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuLP/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuNP/");
+  	  // alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      // for( Int_t iRunLHC18l7 = 20; iRunLHC18l7 <  229; iRunLHC18l7++){
+      //   // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
+      //   // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
+      //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
+      // }
+      //
+      // // alienHandler->AddRunNumber(295829);
 
 
 
       // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2a/");
-  	  // alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2i/");
+  	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
       // for( Int_t iRunLHC15o = 0; iRunLHC15o < 136; iRunLHC15o++){
       //   // if( fRunNum == listOfGoodRunNumbersLHC15o[iRunLHC15o] ) checkIfGoodRun = kTRUE;
       //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC15o[iRunLHC15o] );
       // }
 
 
+      alienHandler->AddRunNumber(245729);
 
 
         // number of files per subjob
@@ -214,19 +216,19 @@ void runAnalysis(Int_t opt)
         // merging: run with "kTRUE" and "full" for normal run
         // to merge on grid run jobs in SetRunMode("terminate")
         // to collect final results set SetMergeViaJDL(kFALSE)
-        // alienHandler->SetMergeViaJDL(kTRUE);
+        alienHandler->SetMergeViaJDL(kTRUE);
 
         /* - The setting to kFALSE is to download the output files
            -
          */
-        alienHandler->SetMergeViaJDL(kFALSE);
+        // alienHandler->SetMergeViaJDL(kFALSE);
         alienHandler->SetMaxMergeStages(3);
 
 
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC18l7_longpolarisation15");
+        alienHandler->SetGridWorkingDir("MC_LHC16b2i");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 
@@ -236,7 +238,7 @@ void runAnalysis(Int_t opt)
         mgr->SetGridHandler(alienHandler);
         if(gridTest) {
             // speficy on how many files you want to run
-            alienHandler->SetNtestFiles(1);
+            alienHandler->SetNtestFiles(2);
             // and launch the analysis
             alienHandler->SetRunMode("test");
             mgr->StartAnalysis("grid");
@@ -246,12 +248,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            // alienHandler->SetRunMode("full");
+            alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            alienHandler->SetRunMode("terminate");
+            // alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
