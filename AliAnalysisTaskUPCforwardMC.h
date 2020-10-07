@@ -154,6 +154,25 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                                      TLorentzVector possibleJPsi );
 
                                 /**
+                                 * This function computes
+                                 * CosTheta in the CS frame
+                                 * using Quantum Tomography.
+                                 */
+        Double_t                CosThetaQuantumTomCS( TLorentzVector muonPositive,
+                                                      TLorentzVector muonNegative,
+                                                      TLorentzVector possibleJPsi );
+
+                                /**
+                                 * This function computes
+                                 * Phi in the CS frame
+                                 * using Quantum Tomography.
+                                 */
+        Double_t                PhiQuantumTomogrCS( TLorentzVector muonPositive,
+                                                    TLorentzVector muonNegative,
+                                                    TLorentzVector possibleJPsi );
+
+
+                                /**
                                  * Use the class as a data member. It contains
                                  * the cuts for the muon track.
                                  */
@@ -1131,6 +1150,13 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fMCCosThetaHelicityFrameTwentyfiveBinsIncohH;        //!
         TH1F*                   fMCCosThetaCsFrameTwentyfiveBinsIncohH;              //!
 
+        TH1F*                   fMCCosThetaCsFrameQuantumTwentyfiveBinsH;            //!
+        TH1F*                   fMCCosThetaCsMinusQuantumCsH;                        //!
+        TH2F*                   fMCCosThetaCsVsQuantumCsH;                           //!
+        TH1F*                   fMCPhiCsFrameQuantumTwentyfiveBinsH;                 //!
+        TH2F*                   fMCPhiCsVsQuantumCsH;                                //!
+        TH1F*                   fMCPhiCsMinusQuantumCsH;                             //!
+
                                 /**
                                  * This histogram shows Phi
                                  * distribution with 25 bins.
@@ -1316,7 +1342,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 41);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 43);
 };
 
 #endif
