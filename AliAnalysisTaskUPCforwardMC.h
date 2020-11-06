@@ -1124,6 +1124,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fCosThetaHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fCosThetaCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fCosThetaQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fCosThetaHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fCosThetaCsFrameTwentyfiveBinsTriggerH[7];         //!
         TH1F*                   fCosThetaHelicityFrameTwentyfiveBinsSidebandsH;    //!
@@ -1167,6 +1168,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fPhiQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsTriggerH[7];         //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsSidebandsH;    //!
@@ -1184,6 +1186,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsH;                   //!
+        // TH1F*                   fMCPhiQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsTriggerH[7];         //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsSidebandsH;    //!

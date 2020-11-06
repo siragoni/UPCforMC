@@ -347,6 +347,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
                                                                     0, 0, 0, 0, 0 },
       fInvariantMassDistributionForSignalExtractionHelicityFrameMyBinningH(0),
       fInvariantMassDistributionForSignalExtractionCsFrameMyBinningH(0),
+      fCosThetaQuantumTwentyfiveBinsH(0),
+      fPhiQuantumTwentyfiveBinsH(0),
       fMCCosThetaCsFrameQuantumTwentyfiveBinsH(0),
       fMCCosThetaCsVsQuantumCsH(0),
       fMCCosThetaCsMinusQuantumCsH(0),
@@ -624,6 +626,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
                                                                     0, 0, 0, 0, 0 },
       fInvariantMassDistributionForSignalExtractionHelicityFrameMyBinningH(0),
       fInvariantMassDistributionForSignalExtractionCsFrameMyBinningH(0),
+      fCosThetaQuantumTwentyfiveBinsH(0),
+      fPhiQuantumTwentyfiveBinsH(0),
       fMCCosThetaCsFrameQuantumTwentyfiveBinsH(0),
       fMCCosThetaCsVsQuantumCsH(0),
       fMCCosThetaCsMinusQuantumCsH(0),
@@ -2157,6 +2161,22 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
   /**
    * - Quantum tomography.
    */
+  fCosThetaQuantumTwentyfiveBinsH =
+        new TH1F( "fCosThetaQuantumTwentyfiveBinsH",
+                  "fCosThetaQuantumTwentyfiveBinsH",
+                  2000, -10, 10
+                  // 100, -1, 1
+                  );
+  fOutputList->Add(fCosThetaQuantumTwentyfiveBinsH);
+
+  fPhiQuantumTwentyfiveBinsH =
+        new TH1F( "fPhiQuantumTwentyfiveBinsH",
+                  "fPhiQuantumTwentyfiveBinsH",
+                  2000, -31.4, 31.4
+                  // 100, -3.14, 3.14
+                  );
+  fOutputList->Add(fPhiQuantumTwentyfiveBinsH);
+
   fMCCosThetaCsFrameQuantumTwentyfiveBinsH =
         new TH1F( "fMCCosThetaCsFrameQuantumTwentyfiveBinsH",
                   "fMCCosThetaCsFrameQuantumTwentyfiveBinsH",
@@ -3249,6 +3269,11 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           Double_t TildePhiPositiveCosThetaCS  = PhiCollinsSoperValue - 0.25 * 3.14;
           Double_t TildePhiNegativeCosThetaCS  = PhiCollinsSoperValue - 0.75 * 3.14;
 
+
+          Double_t CosThetaCsQuantum    = CosThetaQuantumTomCS( muonsCopy2[0],muonsCopy2[1],possibleJPsiCopy);
+          Double_t PhiCsQuantum         = PhiQuantumTomogrCS(   muonsCopy2[0],muonsCopy2[1],possibleJPsiCopy);
+
+
           /* -
            * - IMPORTANT:
            * -
@@ -3321,6 +3346,7 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
            */
           fCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoperValue );
           // fCosThetaCsFrameTwentyfiveBinsH->Fill( CosThetaCollinsSoperValue, ReweightingCosThetaCS  );
+          fCosThetaQuantumTwentyfiveBinsH->Fill( CosThetaCsQuantum );
           if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fCosThetaCsFrameTwentyfiveBinsTriggerH[0]->Fill( CosThetaCollinsSoperValue );
           if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fCosThetaCsFrameTwentyfiveBinsTriggerH[1]->Fill( CosThetaCollinsSoperValue );
           if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fCosThetaCsFrameTwentyfiveBinsTriggerH[2]->Fill( CosThetaCollinsSoperValue );
@@ -3330,6 +3356,7 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           if ( (track[0]->Pt() > 1.15) && (track[1]->Pt() > 1.15) ) fCosThetaCsFrameTwentyfiveBinsTriggerH[6]->Fill( CosThetaCollinsSoperValue );
 
           fPhiCsFrameTwentyfiveBinsH     ->Fill( PhiCollinsSoperValue );
+          fPhiQuantumTwentyfiveBinsH     ->Fill( PhiCsQuantum );
           if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fPhiCsFrameTwentyfiveBinsTriggerH[0]->Fill( PhiCollinsSoperValue );
           if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fPhiCsFrameTwentyfiveBinsTriggerH[1]->Fill( PhiCollinsSoperValue );
           if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fPhiCsFrameTwentyfiveBinsTriggerH[2]->Fill( PhiCollinsSoperValue );
@@ -4338,6 +4365,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                   Double_t ReweightedCosThetaCS2 = 1.0 / ( 1.0 + CosThetaCsForTrial * CosThetaCsForTrial );
                   // fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial*ReweightedCosThetaHE );
                   fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial );
+                  fMCPhiCsFrameQuantumTwentyfiveBinsH->Fill( PhiCsQuantum );
                   // fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial, ReweightedCosThetaHE );
                   fMCPhiHelicityFrameTwentyfiveBinsH->Fill( CosPhiHelicityFrame( muonsMCcopy[0],
                                                                                  muonsMCcopy[1],
@@ -4636,6 +4664,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                   fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial );
                   // fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial, ReweightedCosThetaHE );
                   // fMCCosThetaHelicityFrameTwentyfiveBinsH->Fill( CosThetaHeForTrial*ReweightedCosThetaHE );
+                  fMCPhiCsFrameQuantumTwentyfiveBinsH->Fill( PhiCsQuantum );
                   fMCPhiHelicityFrameTwentyfiveBinsH->Fill( CosPhiHelicityFrame( muonsMCcopy[1],
                                                                                  muonsMCcopy[0],
                                                                                  possibleJPsiMC
@@ -5241,10 +5270,10 @@ TLorentzVector y(TVector3(yone,ytwo,ythree),yfour);
 
 
 
- cout << "XZ dot product = " << x.Dot(z) << endl;
- cout << "YZ dot product = " << y.Dot(z) << endl;
- cout << "XY dot product = " << x.Dot(y) << endl;
- cout << "XQ dot product = " << x.Dot(VectorMeson) << endl;
+ // cout << "XZ dot product = " << x.Dot(z) << endl;
+ // cout << "YZ dot product = " << y.Dot(z) << endl;
+ // cout << "XY dot product = " << x.Dot(y) << endl;
+ // cout << "XQ dot product = " << x.Dot(VectorMeson) << endl;
 
 
 
@@ -5287,8 +5316,11 @@ Double_t AliAnalysisTaskUPCforwardMC::PhiQuantumTomogrCS( TLorentzVector muonPos
                                                           TLorentzVector muonNegative,
                                                           TLorentzVector possibleJPsi )
 {
-  /*    - Quantum Tomography for CS.
-        -
+  /* - This function computes the Collins-Soper cos(theta) for the
+     - helicity of the J/Psi.
+     - The idea should be to get back to a reference frame where it
+     - is easier to compute and to define the proper z-axis.
+     -
    */
 
   /* - Half of the energy per pair of the colliding nucleons.
@@ -5302,68 +5334,197 @@ Double_t AliAnalysisTaskUPCforwardMC::PhiQuantumTomogrCS( TLorentzVector muonPos
      - Projectile runs towards the MUON arm.
      -
    */
-  TLorentzVector pProjCM(0.,0., -MomentumBeam, HalfSqrtSnn*208); // projectile
-  TLorentzVector pTargCM(0.,0.,  MomentumBeam, HalfSqrtSnn*208); // target
+  // TLorentzVector pProjCM(0.,0., -MomentumBeam, HalfSqrtSnn*208); // projectile
+  // TLorentzVector pTargCM(0.,0.,  MomentumBeam, HalfSqrtSnn*208); // target
+  TLorentzVector pProjCM(0.,0., -1, 1); // projectile
+  TLorentzVector pTargCM(0.,0.,  1, 1); // target
+
   TLorentzVector VectorMeson = possibleJPsi;
-  // TLorentzVector VectorMeson(0.,0.,0., 3.096916);
+
+  // // TLorentzVector QuantumZ  = ( pProjCM*( VectorMeson.Dot(pTargCM) ) - pTargCM*( VectorMeson.Dot(pProjCM) ) ).Unit();
+  // TLorentzVector QuantumZ  = ( pProjCM*( VectorMeson.Dot(pTargCM) ) - pTargCM*( VectorMeson.Dot(pProjCM) ) );
+  // // TLorentzVector QuantumZ  =  VectorMeson;
+  // // QuantumZ *= ( 1./QuantumZ.Mag2() );
   //
-  //
-  // TVector3       beta      = ( -1./possibleJPsi.E() ) * possibleJPsi.Vect();
-  // TLorentzVector pMu1Dimu  = muonPositive;
-  // TLorentzVector pMu2Dimu  = muonNegative;
-  // TLorentzVector pProjDimu = pProjCM;
-  // TLorentzVector pTargDimu = pTargCM;
-  // pMu1Dimu.Boost(beta);
-  // pMu2Dimu.Boost(beta);
-  // pProjDimu.Boost(beta);
-  // pTargDimu.Boost(beta);
-  // VectorMeson.Boost(beta);
-
-
-  // cout << "Vector meson Px: " << VectorMeson.Px() << "    X: " << VectorMeson.X() << endl;
-  // cout << "Vector meson Py: " << VectorMeson.Py() << "    Y: " << VectorMeson.Y() << endl;
-  // cout << "Vector meson Pz: " << VectorMeson.Pz() << "    Z: " << VectorMeson.Z() << endl;
-  // cout << "pProjCM Px: " << pProjCM.Px() << "    X: " << pProjCM.X() << endl;
-  // cout << "pProjCM Py: " << pProjCM.Py() << "    Y: " << pProjCM.Y() << endl;
-  // cout << "pProjCM Pz: " << pProjCM.Pz() << "    Z: " << pProjCM.Z() << endl;
-  // cout << "pTargCM Px: " << pTargCM.Px() << "    X: " << pTargCM.X() << endl;
-  // cout << "pTargCM Py: " << pTargCM.Py() << "    Y: " << pTargCM.Y() << endl;
-  // cout << "pTargCM Pz: " << pTargCM.Pz() << "    Z: " << pTargCM.Z() << endl;
-
-  // NOT BOOSTED
-  TLorentzVector QuantumZ  = ( pProjCM*( VectorMeson.Dot(pTargCM) ) - pTargCM*( VectorMeson.Dot(pProjCM) ) );
-  Double_t       xQuantumY =  pProjCM.Pz()*pTargCM.E()*VectorMeson.Py()-pProjCM.E()*pTargCM.Pz()*VectorMeson.Py();
-  Double_t       yQuantumY = -pProjCM.Pz()*pTargCM.E()*VectorMeson.Px()+pProjCM.E()*pTargCM.Pz()*VectorMeson.Px();
-  TLorentzVector QuantumYnotnormalised(xQuantumY, yQuantumY, 0., 0.);
-  TLorentzVector QuantumY = QuantumYnotnormalised;
-  TLorentzVector QuantumX = VectorMeson - pProjCM*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pProjCM)) )) - pTargCM*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pTargCM)) ));
-
-  // BOOSTED
-  // TLorentzVector QuantumZ  = ( pProjDimu*( VectorMeson.Dot(pTargDimu) ) - pTargDimu*( VectorMeson.Dot(pProjDimu) ) );
-  // Double_t       xQuantumY =  pProjDimu.Py()*pTargDimu.Pz()*VectorMeson.E()-pProjDimu.Pz()*pTargDimu.Py()*VectorMeson.E();
-  // Double_t       yQuantumY = -pProjDimu.Px()*pTargDimu.Pz()*VectorMeson.E()+pProjDimu.Pz()*pTargDimu.Px()*VectorMeson.E();
-  // Double_t       zQuantumY =  pProjDimu.Px()*pTargDimu.Py()*VectorMeson.E()-pProjDimu.Py()*pTargDimu.Px()*VectorMeson.E();
-  // TLorentzVector QuantumYnotnormalised(xQuantumY, yQuantumY, zQuantumY, 0.);
+  // Double_t       xQuantumY =  pProjCM.Pz()*pTargCM.E()*VectorMeson.Py()-pProjCM.E()*pTargCM.Pz()*VectorMeson.Py();
+  // Double_t       yQuantumY = -pProjCM.Pz()*pTargCM.E()*VectorMeson.Px()+pProjCM.E()*pTargCM.Pz()*VectorMeson.Px();
+  // TLorentzVector QuantumYnotnormalised(xQuantumY, yQuantumY, 0., 0.);
+  // // TLorentzVector QuantumY = QuantumYnotnormalised.Unit();
   // TLorentzVector QuantumY = QuantumYnotnormalised;
-  // TLorentzVector QuantumX = VectorMeson - pProjDimu*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pProjDimu)) )) - pTargDimu*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pTargDimu)) ));
+  // // QuantumY *= ( 1./QuantumY.Mag2() );
+  // // TLorentzVector QuantumX = ( QuantumY.Dot(QuantumZ) ).Unit();
+  // // TLorentzVector QuantumX = ( QuantumY.Dot(QuantumZ) );
+  // // QuantumX *= ( 1./QuantumX.Mag2() );
+  // TLorentzVector QuantumX = VectorMeson - pProjCM*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pProjCM)) )) - pTargCM*(VectorMeson.Mag2()/( 2*(VectorMeson.Dot(pTargCM)) ));
+  // // QuantumX *= ( 1./QuantumX.Mag2() );
   //
   // cout << "XZ dot product = " << QuantumX.Dot(QuantumZ) << endl;
   // cout << "YZ dot product = " << QuantumY.Dot(QuantumZ) << endl;
   // cout << "XY dot product = " << QuantumX.Dot(QuantumY) << endl;
+  // cout << "XQ dot product = " << QuantumX.Dot(VectorMeson) << endl;
+  //
+  // TLorentzVector DifferenceMuons   = muonPositive - muonNegative;
+  // Double_t       xFinalVector      = QuantumX.Dot(DifferenceMuons);
+  // Double_t       yFinalVector      = QuantumY.Dot(DifferenceMuons);
+  // Double_t       zFinalVector      = QuantumZ.Dot(DifferenceMuons);
+  // TVector3       FinalVector( xFinalVector, yFinalVector, zFinalVector );
+  //
+  // Double_t       CosThetaQuantumCS = ( FinalVector.Unit() ).Z();
+  // Double_t       SinThetaQuantumCS = TMath::Sqrt( 1 - CosThetaQuantumCS*CosThetaQuantumCS );
+  // Double_t       PhiQuantumCS      = TMath::ASin( ( (FinalVector.Unit()).Y() )/ SinThetaQuantumCS );
 
 
-  TLorentzVector DifferenceMuons   = muonPositive - muonNegative;
-  Double_t       xFinalVector      = QuantumX.Dot(DifferenceMuons);
-  Double_t       yFinalVector      = QuantumY.Dot(DifferenceMuons);
-  Double_t       zFinalVector      = QuantumZ.Dot(DifferenceMuons);
-  TVector3       FinalVector( xFinalVector, yFinalVector, zFinalVector );
-
-  Double_t       CosThetaQuantumCS = ( FinalVector.Unit() ).Z();
-  Double_t       SinThetaQuantumCS = TMath::Sqrt( 1 - CosThetaQuantumCS*CosThetaQuantumCS );
-  Double_t       PhiQuantumCS      = TMath::ASin( ( (FinalVector.Unit()).Y() )/ SinThetaQuantumCS );
 
 
-  return PhiQuantumCS;
+  // Daniel
+
+
+
+  //calculate z;
+  TLorentzVector z;
+  Float_t part1 = 0.;
+  Float_t part2 = 0.;
+
+  //Dot product: v1*v2 = t1*t2-x1*x2-y1*y2-z1*z2
+
+  part1 = VectorMeson.Dot(pTargCM);
+  part2 = VectorMeson.Dot(pProjCM);
+
+  Float_t part3x = pProjCM.X()*part1;
+  Float_t part3y = pProjCM.Y()*part1;
+  Float_t part3z = pProjCM.Z()*part1;
+  Float_t part3e = pProjCM.T()*part1;
+
+  Float_t part4x = pTargCM.X()*part2;
+  Float_t part4y = pTargCM.Y()*part2;
+  Float_t part4z = pTargCM.Z()*part2;
+  Float_t part4e = pTargCM.T()*part2;
+
+  TLorentzVector part3(TVector3(part3x,part3y,part3z), part3e);
+  TLorentzVector part4(TVector3(part4x,part4y,part4z),part4e);
+
+  // Q=Q; pb=Pbar; pa=P; from paper
+  // Un-normalized Z
+  // z = part3 - part4;
+  z = part4 - part3;
+
+   //Normalized z
+   Float_t normz = TMath::Sqrt(-z*z);
+   Float_t znx = z.X()/normz;
+   Float_t zny = z.Y()/normz;
+   Float_t znz = z.Z()/normz;
+   Float_t zne = z.E()/normz;
+
+   //Normalized z
+   TLorentzVector zhat(TVector3(znx,zny,znz),zne);
+
+// calculate x
+TLorentzVector x;
+
+Float_t constant1 = (VectorMeson.Dot(VectorMeson))/(2*(VectorMeson.Dot(pProjCM)));
+Float_t constant2 = (VectorMeson.Dot(VectorMeson))/(2*(VectorMeson.Dot(pTargCM)));
+
+Float_t comp1x = pProjCM.X()*constant1;
+Float_t comp1y = pProjCM.Y()*constant1;
+Float_t comp1z = pProjCM.Z()*constant1;
+Float_t comp1e = pProjCM.T()*constant1;
+
+TLorentzVector comp1(TVector3(comp1x,comp1y,comp1z),comp1e);
+
+Float_t comp2x = pTargCM.X()*constant2;
+Float_t comp2y = pTargCM.Y()*constant2;
+Float_t comp2z = pTargCM.Z()*constant2;
+Float_t comp2e = pTargCM.T()*constant2;
+
+TLorentzVector comp2(TVector3(comp2x,comp2y, comp2z),comp2e);
+
+//Un-normalized x
+x = VectorMeson - comp1 - comp2;
+
+
+  //normalize x
+  Float_t normx = TMath::Sqrt(-x*x);
+  Float_t xnx = x.X()/normx;
+  Float_t xny = x.Y()/normx;
+  Float_t xnz = x.Z()/normx;
+  Float_t xne = x.E()/normx;
+
+   //Normalized x
+  TLorentzVector xhat(TVector3(xnx,xny,xnz),xne);
+
+
+
+
+
+
+// calculate y
+//TLorentzVector y;
+Float_t yone = pProjCM.Y()*pTargCM.Z()*VectorMeson.E() - pProjCM.Z()*pTargCM.Y()*VectorMeson.E() + pProjCM.Z()*pTargCM.E()*VectorMeson.Y() + pProjCM.E()*pTargCM.Y()*VectorMeson.Z() - pProjCM.Y()*pTargCM.E()*VectorMeson.Z() - pProjCM.E()*pTargCM.Z()*VectorMeson.Y();
+Float_t ytwo = -pProjCM.Z()*pTargCM.E()*VectorMeson.X() + pProjCM.Z()*pTargCM.X()*VectorMeson.E() - pProjCM.X()*pTargCM.Z()*VectorMeson.E() + pProjCM.X()*pTargCM.E()*VectorMeson.Z() - pProjCM.E()*pTargCM.X()*VectorMeson.Z() + pProjCM.E()*pTargCM.Z()*VectorMeson.X();
+Float_t ythree = pProjCM.X()*pTargCM.Y()*VectorMeson.E() - pProjCM.Y()*pTargCM.X()*VectorMeson.E() + pProjCM.Y()*pTargCM.E()*VectorMeson.X() - pProjCM.X()*pTargCM.E()*VectorMeson.Y() + pProjCM.E()*pTargCM.X()*VectorMeson.Y() - pProjCM.E()*pTargCM.Y()*VectorMeson.X();
+Float_t yfour = -pProjCM.X()*pTargCM.Y()*VectorMeson.Z() + pProjCM.X()*pTargCM.Z()*VectorMeson.Y() - pProjCM.Z()*pTargCM.X()*VectorMeson.Y() + pProjCM.Z()*pTargCM.Y()*VectorMeson.X() - pProjCM.Y()*pTargCM.Z()*VectorMeson.X() + pProjCM.Y()*pTargCM.X()*VectorMeson.Z();
+
+//Un-normalized y
+TLorentzVector y(TVector3(yone,ytwo,ythree),yfour);
+
+ //normalize y
+ Float_t normy = TMath::Sqrt(-y*y);
+ Float_t ynx = y.X()/normy;
+ Float_t yny = y.Y()/normy;
+ Float_t ynz = y.Z()/normy;
+ Float_t yne = y.E()/normy;
+
+//normalized y
+ TLorentzVector yhat(TVector3(ynx,yny,ynz),yne);
+
+
+
+ // cout << "XZ dot product = " << x.Dot(z) << endl;
+ // cout << "YZ dot product = " << y.Dot(z) << endl;
+ // cout << "XY dot product = " << x.Dot(y) << endl;
+ // cout << "XQ dot product = " << x.Dot(VectorMeson) << endl;
+
+
+
+   //Lepton momentum difference
+   TLorentzVector diff;
+   diff = (muonPositive - muonNegative);
+   Float_t diff2x = diff.X()/2.;
+   Float_t diff2y = diff.Y()/2.;
+   Float_t diff2z = diff.Z()/2.;
+   Float_t diff2e = diff.E()/2.;
+   TLorentzVector diff2(TVector3(diff2x,diff2y,diff2z),diff2e);
+
+   //Normalize diff2
+   Float_t norm2 = TMath::Sqrt(-diff2*diff2);
+   Float_t diff3x = diff2.X()/norm2;
+   Float_t diff3y = diff2.Y()/norm2;
+   Float_t diff3z = diff2.Z()/norm2;
+   Float_t diff3e = diff2.E()/norm2;
+
+   TLorentzVector diff3(TVector3(diff3x,diff3y,diff3z),diff3e);
+
+   //computing the angles
+   Float_t cosThetaCS       = zhat*diff3;
+   Float_t SinThetaCosPhiCS = xhat*diff3;
+   Float_t SinThetaSinPhiCS = yhat*diff3;
+  //**************************************
+
+
+
+  Double_t SinTheta = TMath::Sqrt( 1 - cosThetaCS*cosThetaCS );
+  // Double_t Phi      = TMath::ASin( SinThetaSinPhiCS / SinTheta );
+  Double_t Phi      = TMath::ATan2( SinThetaSinPhiCS, SinThetaCosPhiCS );
+
+
+
+
+  // Double_t       CosThetaQuantumCS = ( FinalVector.Unit() ).Z();
+  // Double_t       SinThetaQuantumCS = TMath::Sqrt( 1 - CosThetaQuantumCS*CosThetaQuantumCS );
+  // Double_t       PhiQuantumCS      = TMath::ASin( ( (FinalVector.Unit()).Y() )/ SinThetaQuantumCS );
+
+
+  return Phi;
 
 }
 //_____________________________________________________________________________

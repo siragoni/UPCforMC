@@ -131,7 +131,8 @@ void runAnalysis(Int_t opt)
         TChain* chain = new TChain("aodTree");
         // add a few files to the chain (change this so that your local files are added)
 
-        FILE *f = fopen("listMCsample.txt","r");
+        // FILE *f = fopen("listMCsample.txt","r");
+        FILE *f = fopen("listAxE.txt","r");
         // FILE *f = fopen("list.txt","r");
         char fileadd[300];
         Int_t flaggingValue = 0;
@@ -175,34 +176,34 @@ void runAnalysis(Int_t opt)
 
 
 
-      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
-      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
-      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
-      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
-      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuLP/");
-      // // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuNP/");
-  	  // alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kTwoGammaToMuMedium/");
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohJpsiToMu/");
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kIncohPsi2sToMuPi/");
+      alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMu/");
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuLP/");
+      // alienHandler->SetGridDataDir("/alice/sim/2018/LHC18l7/kCohJpsiToMuNP/");
+  	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
       // for( Int_t iRunLHC18l7 = 20; iRunLHC18l7 <  229; iRunLHC18l7++){
-      //   // for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
-      //   // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
-      //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
-      // }
-      //
-      // // alienHandler->AddRunNumber(295829);
+      for( Int_t iRunLHC18l7 = 0; iRunLHC18l7 <  228; iRunLHC18l7++){
+        // if ( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] == 296269 ) continue;
+        alienHandler->AddRunNumber( listOfGoodRunNumbersLHC18l7[iRunLHC18l7] );
+      }
+
+      // alienHandler->AddRunNumber(295829);
 
 
 
       // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2a/");
-      // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2i/");
-      alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2j/");
-  	  alienHandler->SetDataPattern("*AOD/*AliAOD.root");
+      // // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2i/");
+      // // alienHandler->SetGridDataDir("/alice/sim/2016/LHC16b2j/");
+  	  // alienHandler->SetDataPattern("*AOD/*AliAOD.root");
       // for( Int_t iRunLHC15o = 0; iRunLHC15o < 136; iRunLHC15o++){
       //   // if( fRunNum == listOfGoodRunNumbersLHC15o[iRunLHC15o] ) checkIfGoodRun = kTRUE;
       //   alienHandler->AddRunNumber( listOfGoodRunNumbersLHC15o[iRunLHC15o] );
       // }
 
 
-      alienHandler->AddRunNumber(245729);
+      // alienHandler->AddRunNumber(245729);
 
 
         // number of files per subjob
@@ -229,7 +230,7 @@ void runAnalysis(Int_t opt)
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC16b2j");
+        alienHandler->SetGridWorkingDir("MC_LHC18l7_QT_AxE");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 
@@ -249,12 +250,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            // alienHandler->SetRunMode("full");
+            alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            alienHandler->SetRunMode("terminate");
+            // alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
