@@ -218,6 +218,8 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * pseudorapidity distribution of the many muons.
                                  */
         TH1F*                   fEtaMuonH;          //!
+        TH1F*                   fThetaMuonH;        //!
+        TH1F*                   fPhiMuonH;          //!
 
                                 /**
                                  *

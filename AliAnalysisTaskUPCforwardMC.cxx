@@ -90,6 +90,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fNumberMuonsH(0),
       fCounterH(0),
       fEtaMuonH(0),
+      fThetaMuonH(0),
+      fPhiMuonH(0),
       fRAbsMuonH(0),
       fInvariantMassDistributionH(0),
       fInvariantMassDistributionRapidityBinsH{ 0, 0, 0, 0, 0, 0},
@@ -369,6 +371,8 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fNumberMuonsH(0),
       fCounterH(0),
       fEtaMuonH(0),
+      fThetaMuonH(0),
+      fPhiMuonH(0),
       fRAbsMuonH(0),
       fInvariantMassDistributionH(0),
       fInvariantMassDistributionRapidityBinsH{ 0, 0, 0, 0, 0, 0},
@@ -757,6 +761,12 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
 
   fEtaMuonH = new TH1F("fEtaMuonH", "fEtaMuonH", 90, -2, -5);
   fOutputList->Add(fEtaMuonH);
+
+  fThetaMuonH = new TH1F("fThetaMuonH", "fThetaMuonH", 100000, 0., 3.1415*10);
+  fOutputList->Add(fThetaMuonH);
+
+  fPhiMuonH = new TH1F("fPhiMuonH", "fPhiMuonH", 100000, -3.1415, 3.1415*10);
+  fOutputList->Add(fPhiMuonH);
 
   fRAbsMuonH = new TH1F("fRAbsMuonH", "fRAbsMuonH", 100, 0, 100);
   fOutputList->Add(fRAbsMuonH);
@@ -2826,6 +2836,27 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
       fTemplatePtDistributionRapidityMoreH[5]->Fill(ptOfTheDimuonPair);
     }
   }
+
+
+
+
+
+    if( ptOfTheDimuonPair       <  0.2 &&
+        possibleJPsi.Mag()      >  2.9 &&
+        possibleJPsi.Mag()      <  3.2 &&
+        possibleJPsi.Rapidity() > -4.0 &&
+        possibleJPsi.Rapidity() < -2.5 ) {
+
+      fThetaMuonH->Fill( track[0]->Theta() );
+      fThetaMuonH->Fill( track[1]->Theta() );
+      fPhiMuonH  ->Fill( track[0]->Phi()   );
+      fPhiMuonH  ->Fill( track[1]->Phi()   );
+
+
+    }
+
+
+
 
   //_______________________________
   //    SIDEBANDS
