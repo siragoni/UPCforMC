@@ -250,12 +250,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            alienHandler->SetRunMode("full");
+            // alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            // alienHandler->SetRunMode("terminate");
+            alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
