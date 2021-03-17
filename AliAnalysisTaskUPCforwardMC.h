@@ -681,6 +681,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fInvariantMassDistributionOnlyPhiCsFrameTwentyfiveBinsH[25];       //!
         TH1F*                   fInvariantMassDistributionOnlyCosThetaCsFrameTwentyfiveBinsH[25];  //!
         TH1F*                   fInvariantMassDistributionOnlyTildePhiCsFrameTwentyfiveBinsH[25];  //!
+        TH1F*                   fInvariantMassDistributionOnlyPhiHeFrameTwentyfiveBinsHv2[25];     //!
+        TH1F*                   fInvariantMassDistributionOnlyTildePhiHeFrameTwentyfiveBinsHv2[25];//!
+        TH1F*                   fInvariantMassDistributionOnlyPhiCsFrameTwentyfiveBinsHv2[25];     //!
+        TH1F*                   fInvariantMassDistributionOnlyTildePhiCsFrameTwentyfiveBinsHv2[25];//!
 
                                 /**
                                  * This histogram shows the invariant mass
@@ -1169,10 +1173,14 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NB: CS => Collins-Soper Frame
                                  */
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsH;             //!
+        TH1F*                   fPhiHelicityFrameTwentyfiveBinsHv2;           //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fPhiCsFrameTwentyfiveBinsHv2;                 //!
         TH1F*                   fPhiQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
+        TH1F*                   fPhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsTriggerH[7];         //!
+        TH1F*                   fPhiCsFrameTwentyfiveBinsTriggerHv2[7];       //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsSidebandsH;    //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsSidebandsH;          //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsIncohH;        //!
@@ -1187,10 +1195,14 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NB: CS => Collins-Soper Frame
                                  */
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsH;             //!
+        TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsHv2;           //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fMCPhiCsFrameTwentyfiveBinsHv2;                 //!
         // TH1F*                   fMCPhiQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
+        TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsTriggerH[7];         //!
+        TH1F*                   fMCPhiCsFrameTwentyfiveBinsTriggerHv2[7];       //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsSidebandsH;    //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsSidebandsH;          //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsIncohH;        //!
@@ -1205,9 +1217,13 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NB: CS => Collins-Soper Frame
                                  */
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsH;             //!
+        TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsHv2;           //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fTildePhiCsFrameTwentyfiveBinsHv2;                 //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
+        TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsTriggerH[7];         //!
+        TH1F*                   fTildePhiCsFrameTwentyfiveBinsTriggerHv2[7];       //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsSidebandsH;    //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsSidebandsH;          //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsIncohH;        //!
@@ -1222,9 +1238,13 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NB: CS => Collins-Soper Frame
                                  */
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsH;             //!
+        TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsHv2;           //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsH;                   //!
+        TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsHv2;                 //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
+        TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsTriggerH[7];         //!
+        TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsTriggerHv2[7];       //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsSidebandsH;    //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsSidebandsH;          //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsIncohH;        //!
@@ -1347,7 +1367,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 43);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 44);
 };
 
 #endif
