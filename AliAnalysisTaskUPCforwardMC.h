@@ -507,8 +507,16 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * a lego plot. See for an example:
                                  *https://www.researchgate.net/figure/The-migration-matrix-for-leading-p-jet-T-Element-i-j-is-the-probability-for-a-particle_fig1_222896619
                                  */
-        Double_t                fCosThetaReconHelicityFrame;           //!
+        Double_t                fCosThetaReconHelicityFrame;      //!
         Double_t                fPhiReconHelicityFrame;           //!
+        Double_t                fPhiRestrictedRangeHE;            //!
+        Double_t                fMCPhiRestrictedRangeHE;          //!
+        Double_t                fTildePhiRestrictedRangeHE;       //!
+        Double_t                fMCTildePhiRestrictedRangeHE;     //!
+        Double_t                fPhiRestrictedRangeCS;            //!
+        Double_t                fMCPhiRestrictedRangeCS;          //!
+        Double_t                fTildePhiRestrictedRangeCS;       //!
+        Double_t                fMCTildePhiRestrictedRangeCS;     //!
 
                                 /**
                                  * Counter for the UPC events to access vectors.
@@ -1174,8 +1182,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsHv2;           //!
+        TH1F*                   fPhiHelicityFrameTwentyfiveBinsHv2_restrict;  //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsH;                   //!
         TH1F*                   fPhiCsFrameTwentyfiveBinsHv2;                 //!
+        TH1F*                   fPhiCsFrameTwentyfiveBinsHv2_restrict;        //!
         TH1F*                   fPhiQuantumTwentyfiveBinsH;                   //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fPhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
@@ -1195,10 +1205,12 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NB: CS => Collins-Soper Frame
                                  */
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsH;             //!
+        TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict;  //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsHv2;           //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsH;                   //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsHv2;                 //!
-        // TH1F*                   fMCPhiQuantumTwentyfiveBinsH;                   //!
+        TH1F*                   fMCPhiCsFrameTwentyfiveBinsHv2_restrict;        //!
+        // TH1F*                   fMCPhiQuantumTwentyfiveBinsH;                //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fMCPhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fMCPhiCsFrameTwentyfiveBinsTriggerH[7];         //!
@@ -1218,8 +1230,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsHv2;           //!
+        TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict;  //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsH;                   //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsHv2;                 //!
+        TH1F*                   fTildePhiCsFrameTwentyfiveBinsHv2_restrict;        //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fTildePhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fTildePhiCsFrameTwentyfiveBinsTriggerH[7];         //!
@@ -1239,8 +1253,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsH;             //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsHv2;           //!
+        TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict;  //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsH;                   //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsHv2;                 //!
+        TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict;        //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsTriggerH[7];   //!
         TH1F*                   fMCTildePhiHelicityFrameTwentyfiveBinsTriggerHv2[7]; //!
         TH1F*                   fMCTildePhiCsFrameTwentyfiveBinsTriggerH[7];         //!
@@ -1367,7 +1383,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 44);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 46);
 };
 
 #endif

@@ -189,6 +189,15 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fCosThetaReconHelicityFrame(0),
       fPhiGeneratedHelicityFrame(0),
       fPhiReconHelicityFrame(0),
+      // Study for AxE effect
+      fPhiRestrictedRangeHE(-999.),
+      fMCPhiRestrictedRangeHE(-999.),
+      fTildePhiRestrictedRangeHE(-999.),
+      fMCTildePhiRestrictedRangeHE(-999.),
+      fPhiRestrictedRangeCS(-999.),
+      fMCPhiRestrictedRangeCS(-999.),
+      fTildePhiRestrictedRangeCS(-999.),
+      fMCTildePhiRestrictedRangeCS(-999.),
       fCounterUPCevent(0),
       fBinMigrationHelicityH(0),
       fBinMigrationForPhiHelicityH(0),
@@ -267,12 +276,16 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fMCCosThetaHelicityFrameTwentyfiveBinsH(0),
       fPhiHelicityFrameTwentyfiveBinsH(0),
       fPhiHelicityFrameTwentyfiveBinsHv2(0),
+      fPhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fMCPhiHelicityFrameTwentyfiveBinsH(0),
       fMCPhiHelicityFrameTwentyfiveBinsHv2(0),
+      fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fTildePhiHelicityFrameTwentyfiveBinsH(0),
       fTildePhiHelicityFrameTwentyfiveBinsHv2(0),
+      fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fMCTildePhiHelicityFrameTwentyfiveBinsH(0),
       fMCTildePhiHelicityFrameTwentyfiveBinsHv2(0),
+      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fCosThetaHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fMCCosThetaHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fPhiHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
@@ -289,12 +302,16 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fMCCosThetaCsFrameTwentyfiveBinsH(0),
       fPhiCsFrameTwentyfiveBinsH(0),
       fPhiCsFrameTwentyfiveBinsHv2(0),
+      fPhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fMCPhiCsFrameTwentyfiveBinsH(0),
       fMCPhiCsFrameTwentyfiveBinsHv2(0),
+      fMCPhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fTildePhiCsFrameTwentyfiveBinsH(0),
       fTildePhiCsFrameTwentyfiveBinsHv2(0),
+      fTildePhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fMCTildePhiCsFrameTwentyfiveBinsH(0),
       fMCTildePhiCsFrameTwentyfiveBinsHv2(0),
+      fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fCosThetaCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fMCCosThetaCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fPhiCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
@@ -498,6 +515,15 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fCosThetaReconHelicityFrame(0),
       fPhiGeneratedHelicityFrame(0),
       fPhiReconHelicityFrame(0),
+      // Study for AxE effect
+      fPhiRestrictedRangeHE(-999.),
+      fMCPhiRestrictedRangeHE(-999.),
+      fTildePhiRestrictedRangeHE(-999.),
+      fMCTildePhiRestrictedRangeHE(-999.),
+      fPhiRestrictedRangeCS(-999.),
+      fMCPhiRestrictedRangeCS(-999.),
+      fTildePhiRestrictedRangeCS(-999.),
+      fMCTildePhiRestrictedRangeCS(-999.),
       fCounterUPCevent(0),
       fBinMigrationHelicityH(0),
       fBinMigrationForPhiHelicityH(0),
@@ -576,12 +602,16 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fMCCosThetaHelicityFrameTwentyfiveBinsH(0),
       fPhiHelicityFrameTwentyfiveBinsH(0),
       fPhiHelicityFrameTwentyfiveBinsHv2(0),
+      fPhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fMCPhiHelicityFrameTwentyfiveBinsH(0),
       fMCPhiHelicityFrameTwentyfiveBinsHv2(0),
+      fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fTildePhiHelicityFrameTwentyfiveBinsH(0),
       fTildePhiHelicityFrameTwentyfiveBinsHv2(0),
+      fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fMCTildePhiHelicityFrameTwentyfiveBinsH(0),
       fMCTildePhiHelicityFrameTwentyfiveBinsHv2(0),
+      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict(0),
       fCosThetaHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fMCCosThetaHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fPhiHelicityFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
@@ -598,12 +628,16 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fMCCosThetaCsFrameTwentyfiveBinsH(0),
       fPhiCsFrameTwentyfiveBinsH(0),
       fPhiCsFrameTwentyfiveBinsHv2(0),
+      fPhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fMCPhiCsFrameTwentyfiveBinsH(0),
       fMCPhiCsFrameTwentyfiveBinsHv2(0),
+      fMCPhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fTildePhiCsFrameTwentyfiveBinsH(0),
       fTildePhiCsFrameTwentyfiveBinsHv2(0),
+      fTildePhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fMCTildePhiCsFrameTwentyfiveBinsH(0),
       fMCTildePhiCsFrameTwentyfiveBinsHv2(0),
+      fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict(0),
       fCosThetaCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fMCCosThetaCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
       fPhiCsFrameTwentyfiveBinsTriggerH{0,0,0,0,0,0,0},
@@ -1750,6 +1784,13 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   );
   fOutputList->Add(fPhiHelicityFrameTwentyfiveBinsHv2);
 
+  fPhiHelicityFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fPhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  "fPhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fPhiHelicityFrameTwentyfiveBinsHv2_restrict);
+
   fMCPhiHelicityFrameTwentyfiveBinsH =
         new TH1F( "fMCPhiHelicityFrameTwentyfiveBinsH",
                   "fMCPhiHelicityFrameTwentyfiveBinsH",
@@ -1763,6 +1804,13 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   25, 0, 2.*TMath::Pi()
                   );
   fOutputList->Add(fMCPhiHelicityFrameTwentyfiveBinsHv2);
+
+  fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  "fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict);
 
   fTildePhiHelicityFrameTwentyfiveBinsH =
         new TH1F( "fTildePhiHelicityFrameTwentyfiveBinsH",
@@ -1780,6 +1828,14 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   );
   fOutputList->Add(fTildePhiHelicityFrameTwentyfiveBinsHv2);
 
+  fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  "fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  // 25, -3.14*7.0*0.25, 3.14*3.0*0.25
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict);
+
   fMCTildePhiHelicityFrameTwentyfiveBinsH =
         new TH1F( "fMCTildePhiHelicityFrameTwentyfiveBinsH",
                   "fMCTildePhiHelicityFrameTwentyfiveBinsH",
@@ -1795,6 +1851,14 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   25, 0, 2.*TMath::Pi()
                   );
   fOutputList->Add(fMCTildePhiHelicityFrameTwentyfiveBinsHv2);
+
+  fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  "fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict",
+                  // 25, -3.14*7.0*0.25, 3.14*3.0*0.25
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict);
 
   for ( Int_t iTrigger = 0; iTrigger < 7; iTrigger++ ) {
     fCosThetaHelicityFrameTwentyfiveBinsTriggerH[iTrigger] =
@@ -1882,6 +1946,13 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   );
   fOutputList->Add(fPhiCsFrameTwentyfiveBinsHv2);
 
+  fPhiCsFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fPhiCsFrameTwentyfiveBinsHv2_restrict",
+                  "fPhiCsFrameTwentyfiveBinsHv2_restrict",
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fPhiCsFrameTwentyfiveBinsHv2_restrict);
+
   fMCPhiCsFrameTwentyfiveBinsH =
         new TH1F( "fMCPhiCsFrameTwentyfiveBinsH",
                   "fMCPhiCsFrameTwentyfiveBinsH",
@@ -1895,6 +1966,13 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   25, 0, 2.*TMath::Pi()
                   );
   fOutputList->Add(fMCPhiCsFrameTwentyfiveBinsHv2);
+
+  fMCPhiCsFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fMCPhiCsFrameTwentyfiveBinsHv2_restrict",
+                  "fMCPhiCsFrameTwentyfiveBinsHv2_restrict",
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fMCPhiCsFrameTwentyfiveBinsHv2_restrict);
 
   fTildePhiCsFrameTwentyfiveBinsH =
         new TH1F( "fTildePhiCsFrameTwentyfiveBinsH",
@@ -1912,6 +1990,14 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   );
   fOutputList->Add(fTildePhiCsFrameTwentyfiveBinsHv2);
 
+  fTildePhiCsFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fTildePhiCsFrameTwentyfiveBinsHv2_restrict",
+                  "fTildePhiCsFrameTwentyfiveBinsHv2_restrict",
+                  // 25, -3.14*7.0*0.25, 3.14*3.0*0.25
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fTildePhiCsFrameTwentyfiveBinsHv2_restrict);
+
   fMCTildePhiCsFrameTwentyfiveBinsH =
         new TH1F( "fMCTildePhiCsFrameTwentyfiveBinsH",
                   "fMCTildePhiCsFrameTwentyfiveBinsH",
@@ -1927,6 +2013,14 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
                   25, 0, 2.*TMath::Pi()
                   );
   fOutputList->Add(fMCTildePhiCsFrameTwentyfiveBinsHv2);
+
+  fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict =
+        new TH1F( "fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict",
+                  "fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict",
+                  // 25, -3.14*7.0*0.25, 3.14*3.0*0.25
+                  25, 0, 2.*TMath::Pi()
+                  );
+  fOutputList->Add(fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict);
 
   for ( Int_t iTrigger = 0; iTrigger < 7; iTrigger++ ) {
     fCosThetaCsFrameTwentyfiveBinsTriggerH[iTrigger] =
@@ -3553,6 +3647,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
 
           fPhiHelicityFrameTwentyfiveBinsH     ->Fill( PhiHelicityFrameValue10 );
           fPhiHelicityFrameTwentyfiveBinsHv2   ->Fill( PhiHelicityFrameValue10 + TMath::Pi() );
+          if ( (CosThetaHelicityFrameValue10 > -0.6) && (CosThetaHelicityFrameValue10 < 0.6) ) {
+            fPhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( PhiHelicityFrameValue10 + TMath::Pi() );
+          }
           if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fPhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( PhiHelicityFrameValue10 );
           if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fPhiHelicityFrameTwentyfiveBinsTriggerH[1]->Fill( PhiHelicityFrameValue10 );
           if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fPhiHelicityFrameTwentyfiveBinsTriggerH[2]->Fill( PhiHelicityFrameValue10 );
@@ -3574,6 +3671,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           if( CosThetaHelicityFrameValue10 > 0 ){
             fTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosTheta );
             fTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetav2 );
+            if ( CosThetaHelicityFrameValue10 < 0.6 ) {
+              fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetav2 );
+            }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiPositiveCosTheta );
             if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[1]->Fill( TildePhiPositiveCosTheta );
             if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[2]->Fill( TildePhiPositiveCosTheta );
@@ -3593,6 +3693,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           } else {
             fTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosTheta );
             fTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetav2 );
+            if ( CosThetaHelicityFrameValue10 > -0.6 ) {
+              fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetav2 );
+            }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiNegativeCosTheta );
             if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[1]->Fill( TildePhiNegativeCosTheta );
             if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[2]->Fill( TildePhiNegativeCosTheta );
@@ -3626,6 +3729,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
 
           fPhiCsFrameTwentyfiveBinsH     ->Fill( PhiCollinsSoperValue );
           fPhiCsFrameTwentyfiveBinsHv2   ->Fill( PhiCollinsSoperValue + TMath::Pi() );
+          if ( (CosThetaCollinsSoperValue > -0.6) && (CosThetaCollinsSoperValue < 0.6) ){
+            fPhiCsFrameTwentyfiveBinsHv2_restrict->Fill( PhiCollinsSoperValue + TMath::Pi() );
+          }
           fPhiQuantumTwentyfiveBinsH     ->Fill( PhiCsQuantum );
           if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fPhiCsFrameTwentyfiveBinsTriggerH[0]->Fill( PhiCollinsSoperValue );
           if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fPhiCsFrameTwentyfiveBinsTriggerH[1]->Fill( PhiCollinsSoperValue );
@@ -3646,6 +3752,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           if( CosThetaCollinsSoperValue > 0 ){
             fTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosThetaCS );
             fTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetaCSv2 );
+            if ( CosThetaCollinsSoperValue < 0.6 ) {
+              fTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetaCSv2 );
+            }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiPositiveCosThetaCS );
             if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[1]->Fill( TildePhiPositiveCosThetaCS );
             if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[2]->Fill( TildePhiPositiveCosThetaCS );
@@ -3664,6 +3773,9 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           } else {
             fTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosThetaCS );
             fTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetaCSv2 );
+            if ( CosThetaCollinsSoperValue > -0.6 ) {
+              fTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetaCSv2 );
+            }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiNegativeCosThetaCS );
             if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[1]->Fill( TildePhiNegativeCosThetaCS );
             if ( (track[0]->Pt() > 0.95) && (track[1]->Pt() > 0.95) ) fTildePhiCsFrameTwentyfiveBinsTriggerH[2]->Fill( TildePhiNegativeCosThetaCS );
@@ -4737,6 +4849,9 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                                                                  )
                                                                                 );
                   fMCPhiHelicityFrameTwentyfiveBinsHv2->Fill( CosPhiHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) + TMath::Pi() );
+                  if ( (CosThetaHeForTrial > -0.6) && (CosThetaHeForTrial < 0.6) ) {
+                    fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( CosPhiHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) + TMath::Pi() );
+                  }
 
                   if( CosThetaHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) > 0 ){
                     Double_t PhiHelicityFrameValueTruth  = CosPhiHelicityFrame( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC );
@@ -4760,6 +4875,9 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosTheta   );
                     fMCTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetav2 );
+                    if ( CosThetaHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) < 0.6 ){
+                      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetav2 );
+                    }
                   } else {
                     Double_t PhiHelicityFrameValueTruth  = CosPhiHelicityFrame( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC );
                     Double_t TildePhiPositiveCosTheta    = PhiHelicityFrameValueTruth - 0.25 * 3.14;
@@ -4782,6 +4900,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosTheta   );
                     fMCTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetav2 );
+                    if ( CosThetaHelicityFrame(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) > (-0.6) ){
+                      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetav2 );
+                    }
+
                   }
 
 
@@ -4819,6 +4941,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                                                           )
                                                                          );
                   fMCPhiCsFrameTwentyfiveBinsHv2->Fill( CosPhiCollinsSoper(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) + TMath::Pi() );
+                  if ( (CosThetaCsForTrial > -0.6) && (CosThetaCsForTrial < 0.6) ) {
+                    fMCPhiCsFrameTwentyfiveBinsHv2_restrict->Fill( CosPhiCollinsSoper(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) + TMath::Pi() );
+                  }
+
                   if( CosThetaCollinsSoper(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) > 0 ){
                     Double_t PhiCsFrameValueTruth          = CosPhiCollinsSoper( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC );
                     Double_t TildePhiPositiveCosThetaCS    = PhiCsFrameValueTruth - 0.25 * 3.14;
@@ -4841,6 +4967,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosThetaCS   );
                     fMCTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetaCSv2 );
+                    if ( CosThetaCollinsSoper(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) < 0.6 ){
+                      fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetaCSv2 );
+                    }
+
                   } else {
                     Double_t PhiCsFrameValueTruth  = CosPhiCollinsSoper( muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC );
                     Double_t TildePhiPositiveCosThetaCS    = PhiCsFrameValueTruth - 0.25 * 3.14;
@@ -4863,6 +4993,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosThetaCS   );
                     fMCTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetaCSv2 );
+                    if ( CosThetaCollinsSoper(muonsMCcopy[0],muonsMCcopy[1],possibleJPsiMC) > (-0.6) ){
+                      fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetaCSv2 );
+                    }
+
                   }
                   //_______________________________
                   fMCCosThetaHelicityFrameMyBinningSmallH->Fill( CosThetaHelicityFrame(  muonsMCcopy[0],
@@ -5082,6 +5216,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                                                                  )
                                                                                 );
                   fMCPhiHelicityFrameTwentyfiveBinsHv2->Fill( CosPhiHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) + TMath::Pi() );
+                  if ( (CosThetaHeForTrial > -0.6) && (CosThetaHeForTrial < 0.6) ) {
+                    fMCPhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( CosPhiHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) + TMath::Pi() );
+                  }
+
                   if( CosThetaHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) > 0 ){
                     Double_t PhiHelicityFrameValueTruth  = CosPhiHelicityFrame( muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC );
                     Double_t TildePhiPositiveCosTheta    = PhiHelicityFrameValueTruth - 0.25 * 3.14;
@@ -5104,6 +5242,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosTheta   );
                     fMCTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetav2 );
+                    if ( CosThetaHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) < 0.6 ){
+                      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetav2 );
+                    }
+
                   } else {
                     Double_t PhiHelicityFrameValueTruth  = CosPhiHelicityFrame( muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC );
                     Double_t TildePhiPositiveCosTheta    = PhiHelicityFrameValueTruth - 0.25 * 3.14;
@@ -5126,6 +5268,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                     fMCTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosTheta   );
                     fMCTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetav2 );
+                    if ( CosThetaHelicityFrame(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) > (-0.6) ){
+                      fMCTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetav2 );
+                    }
+
                   }
 
 
@@ -5166,6 +5312,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                                                           )
                                                                          );
                   fMCPhiCsFrameTwentyfiveBinsHv2->Fill( CosPhiCollinsSoper(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) + TMath::Pi() );
+                  if ( (CosThetaCsForTrial > -0.6) && (CosThetaCsForTrial < 0.6) ) {
+                    fMCPhiCsFrameTwentyfiveBinsHv2_restrict->Fill( CosPhiCollinsSoper(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) + TMath::Pi() );
+                  }
+
                   if( CosThetaCollinsSoper(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) > 0 ){
                       Double_t PhiCsFrameValueTruth          = CosPhiCollinsSoper( muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC );
                       Double_t TildePhiPositiveCosThetaCS    = PhiCsFrameValueTruth - 0.25 * 3.14;
@@ -5188,6 +5338,10 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                       fMCTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosThetaCS   );
                       fMCTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetaCSv2 );
+                      if ( CosThetaCollinsSoper(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) < 0.6 ){
+                        fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetaCSv2 );
+                      }
+
                   } else {
                       Double_t PhiCsFrameValueTruth  = CosPhiCollinsSoper( muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC );
                       Double_t TildePhiPositiveCosThetaCS    = PhiCsFrameValueTruth - 0.25 * 3.14;
@@ -5210,6 +5364,9 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
 
                       fMCTildePhiCsFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosThetaCS   );
                       fMCTildePhiCsFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetaCSv2 );
+                      if ( CosThetaCollinsSoper(muonsMCcopy[1],muonsMCcopy[0],possibleJPsiMC) > (-0.6) ){
+                        fMCTildePhiCsFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetaCSv2 );
+                      }
                   }
                   //_______________________________
                   fMCCosThetaHelicityFrameMyBinningSmallH->Fill( CosThetaHelicityFrame(  muonsMCcopy[1],
