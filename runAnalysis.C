@@ -230,7 +230,7 @@ void runAnalysis(Int_t opt)
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC18l7_AxEcheckL_2");
+        alienHandler->SetGridWorkingDir("MC_LHC18l7_AxEcheckL_3");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 

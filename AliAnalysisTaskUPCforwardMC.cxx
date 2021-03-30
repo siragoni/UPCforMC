@@ -4316,6 +4316,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
   Int_t nGoodMuonsMC = 0;
   TLorentzVector muonsMC[2];
   TLorentzVector possibleJPsiMC;
+  TLorentzVector possibleJPsiMC_check;
   Double_t pT[2];
   Double_t eta[2];
   Double_t pseudo[2];
@@ -4348,6 +4349,13 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
                                            );
         nGoodMuonsMC++;
       }
+      if ( (eta[0] < -4.) || (eta[0] > -2.5) || (eta[1] < -4.) || (eta[1] > -2.5) ) continue;
+      if( charge[0] != charge[1] ) {
+        for( Int_t iMuonsMC = 0; iMuonsMC < 2; iMuonsMC++ ) {
+          possibleJPsiMC_check+=muonsMC[iMuonsMC];
+        }
+        if ( (possibleJPsiMC_check.Rapidity() < -4.0) || (possibleJPsiMC_check.Rapidity() > -2.5) ) continue;
+      }
     }
   }
   // cout << "Tracks in this event:  " << fMCEventArg->GetNumberOfTracks() << endl;
@@ -4355,7 +4363,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
      -
    */
   if( nGoodMuonsMC == 2 ) {
-    if ( (eta[0] < -4.) || (eta[0] > -2.5) || (eta[1] < -4.) || (eta[1] > -2.5) ) continue;
+    // if ( (eta[0] < -4.) || (eta[0] > -2.5) || (eta[1] < -4.) || (eta[1] > -2.5) ) continue;
     /* - Unlike-sign muons
        -
      */
@@ -4394,7 +4402,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
         TVector3 betaMC = (-1./possibleJPsiMC.E())*possibleJPsiMC.Vect();
         muonsMC[iBoosting].Boost( betaMC );
       }
-      if ( (possibleJPsiMC.Rapidity() < -4.0) || (possibleJPsiMC.Rapidity() > -2.5) ) continue;
+      // if ( (possibleJPsiMC.Rapidity() < -4.0) || (possibleJPsiMC.Rapidity() > -2.5) ) continue;
       Double_t cosThetaMuonsRestFrameMC[2];
       for( Int_t iAngle = 0; iAngle < 2; iAngle++ ) {
         TVector3 muonsMCVector            = muonsMC[iAngle].Vect();
