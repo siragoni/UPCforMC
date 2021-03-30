@@ -4355,6 +4355,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
      -
    */
   if( nGoodMuonsMC == 2 ) {
+    if ( (eta[0] < -4.) || (eta[0] > -2.5) || (eta[1] < -4.) || (eta[1] > -2.5) ) continue;
     /* - Unlike-sign muons
        -
      */
@@ -4393,6 +4394,7 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
         TVector3 betaMC = (-1./possibleJPsiMC.E())*possibleJPsiMC.Vect();
         muonsMC[iBoosting].Boost( betaMC );
       }
+      if ( (possibleJPsiMC.Rapidity() < -4.0) || (possibleJPsiMC.Rapidity() > -2.5) ) continue;
       Double_t cosThetaMuonsRestFrameMC[2];
       for( Int_t iAngle = 0; iAngle < 2; iAngle++ ) {
         TVector3 muonsMCVector            = muonsMC[iAngle].Vect();
