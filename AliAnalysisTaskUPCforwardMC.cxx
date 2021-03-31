@@ -92,6 +92,7 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fEtaMuonH(0),
       fThetaMuonH(0),
       fPhiMuonH(0),
+      fPtMuonH(0),
       fRAbsMuonH(0),
       fInvariantMassDistributionH(0),
       fInvariantMassDistributionRapidityBinsH{ 0, 0, 0, 0, 0, 0},
@@ -418,6 +419,7 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fEtaMuonH(0),
       fThetaMuonH(0),
       fPhiMuonH(0),
+      fPtMuonH(0),
       fRAbsMuonH(0),
       fInvariantMassDistributionH(0),
       fInvariantMassDistributionRapidityBinsH{ 0, 0, 0, 0, 0, 0},
@@ -857,6 +859,9 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
 
   fPhiMuonH = new TH1F("fPhiMuonH", "fPhiMuonH", 100000, -3.1415, 3.1415*10);
   fOutputList->Add(fPhiMuonH);
+
+  fPtMuonH = new TH1F("fPtMuonH", "fPtMuonH", 2000, 0., 20.);
+  fOutputList->Add(fPtMuonH);
 
   fRAbsMuonH = new TH1F("fRAbsMuonH", "fRAbsMuonH", 100, 0, 100);
   fOutputList->Add(fRAbsMuonH);
@@ -2970,6 +2975,51 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
         PostData(1, fOutputList);
         return;
   }
+
+
+
+
+
+  TLorentzVector muons_ReconCut[2];
+  TLorentzVector possibleJPsi_ReconCut;
+  Double_t       chargeOfMuons_ReconCut[2];
+  for(int indexMuon = 0; indexMuon < 2; indexMuon++) {
+        muons_ReconCut[indexMuon].SetPtEtaPhiM(  track[indexMuon]->Pt(),
+                                                 track[indexMuon]->Eta(),
+                                                 track[indexMuon]->Phi(),
+                                                 TDatabasePDG::Instance()->GetParticle(13)->Mass()
+                                               );
+        possibleJPsi_ReconCut += muons_ReconCut[indexMuon];
+        chargeOfMuons_ReconCut[indexMuon] = track[indexMuon]->Charge();
+  }
+  TLorentzVector muonsCopy_ReconCut[2];
+  TLorentzVector muonsCopy2_ReconCut[2];
+  TLorentzVector possibleJPsiCopy_ReconCut;
+  if( chargeOfMuons_ReconCut[0] > 0 ){
+    muonsCopy_ReconCut[0]     = muons_ReconCut[0];
+    muonsCopy_ReconCut[1]     = muons_ReconCut[1];
+  } else if( chargeOfMuons_ReconCut[0] < 0 ){
+    muonsCopy_ReconCut[0]     = muons_ReconCut[1];
+    muonsCopy_ReconCut[1]     = muons_ReconCut[0];
+  }
+  muonsCopy2_ReconCut[0]      = muonsCopy_ReconCut[0];
+  muonsCopy2_ReconCut[1]      = muonsCopy_ReconCut[1];
+  possibleJPsiCopy_ReconCut = possibleJPsi_ReconCut;
+  Double_t CosThetaHelicityFrameValue_ReconCut = CosThetaHelicityFrame( muonsCopy2_ReconCut[0], muonsCopy2_ReconCut[1], possibleJPsiCopy_ReconCut );
+  if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
+      (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
+        PostData(1, fOutputList);
+        return;
+  }
+
+
+
+
+
+
+
+
+
   for(Int_t iFilling = 0; iFilling < nGoodMuons; iFilling++) {
         fEtaMuonH ->Fill(track[iFilling]->Eta());
         fRAbsMuonH->Fill(track[iFilling]->GetRAtAbsorberEnd());
@@ -3131,6 +3181,8 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
       fThetaMuonH->Fill( track[1]->Theta() );
       fPhiMuonH  ->Fill( track[0]->Phi()   );
       fPhiMuonH  ->Fill( track[1]->Phi()   );
+      fPtMuonH   ->Fill( track[0]->Pt()   );
+      fPtMuonH   ->Fill( track[1]->Pt()   );
 
 
     }

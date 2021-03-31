@@ -220,6 +220,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fEtaMuonH;          //!
         TH1F*                   fThetaMuonH;        //!
         TH1F*                   fPhiMuonH;          //!
+        TH1F*                   fPtMuonH;           //!
 
                                 /**
                                  *
