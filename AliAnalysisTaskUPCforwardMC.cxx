@@ -3006,8 +3006,13 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
   muonsCopy2_ReconCut[1]      = muonsCopy_ReconCut[1];
   possibleJPsiCopy_ReconCut = possibleJPsi_ReconCut;
   Double_t CosThetaHelicityFrameValue_ReconCut = CosThetaHelicityFrame( muonsCopy2_ReconCut[0], muonsCopy2_ReconCut[1], possibleJPsiCopy_ReconCut );
-  if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
-      (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  // if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
+  //     (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  //       PostData(1, fOutputList);
+  //       return;
+  // }
+  if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
+      (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
         PostData(1, fOutputList);
         return;
   }
