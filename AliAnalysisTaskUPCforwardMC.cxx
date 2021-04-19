@@ -402,7 +402,12 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC()
       fMCCosThetaCsMinusQuantumCsH(0),
       fMCPhiCsFrameQuantumTwentyfiveBinsH(0),
       fMCPhiCsVsQuantumCsH(0),
-      fMCPhiCsMinusQuantumCsH(0)
+      fMCPhiCsMinusQuantumCsH(0),
+      fPtReconVsGeneratedH(0),
+      fYReconVsGeneratedH(0),
+      fChiSquareNDFMuonH(0),
+      fPtGenerated(0),
+      fYGenerated(0)
 {
     // default constructor, don't allocate memory here!
     // this is used by root for IO purposes, it needs to remain empty
@@ -729,7 +734,12 @@ AliAnalysisTaskUPCforwardMC::AliAnalysisTaskUPCforwardMC( const char* name )
       fMCCosThetaCsMinusQuantumCsH(0),
       fMCPhiCsFrameQuantumTwentyfiveBinsH(0),
       fMCPhiCsVsQuantumCsH(0),
-      fMCPhiCsMinusQuantumCsH(0)
+      fMCPhiCsMinusQuantumCsH(0),
+      fPtReconVsGeneratedH(0),
+      fYReconVsGeneratedH(0),
+      fChiSquareNDFMuonH(0),
+      fPtGenerated(0),
+      fYGenerated(0)
 {
     // FillGoodRunVector(fVectorGoodRunNumbers);
     for( Int_t iRun = 0; iRun < 60000; iRun++) {
@@ -2523,6 +2533,22 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
   fOutputList->Add(fMCPhiCsMinusQuantumCsH);
 
 
+
+
+
+
+
+  fPtReconVsGeneratedH = new TH2F( "fPtReconVsGeneratedH", "fPtReconVsGeneratedH", 50, 0., 1., 50, 0., 1. );
+  fOutputList->Add(fPtReconVsGeneratedH);
+
+  fYReconVsGeneratedH = new TH2F( "fYReconVsGeneratedH", "fYReconVsGeneratedH", 60, -5., -2., 60, -5., -2. );
+  fOutputList->Add(fYReconVsGeneratedH);
+
+  fChiSquareNDFMuonH = new TH1F( "fChiSquareNDFMuonH", "fChiSquareNDFMuonH", 5000, -1., 99. );
+  fOutputList->Add(fChiSquareNDFMuonH);
+
+
+
   //_______________________________
   // - End of the function
   PostData(1, fOutputList);
@@ -3006,16 +3032,16 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
   muonsCopy2_ReconCut[1]      = muonsCopy_ReconCut[1];
   possibleJPsiCopy_ReconCut = possibleJPsi_ReconCut;
   Double_t CosThetaHelicityFrameValue_ReconCut = CosThetaHelicityFrame( muonsCopy2_ReconCut[0], muonsCopy2_ReconCut[1], possibleJPsiCopy_ReconCut );
-  // if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
-  //     (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
-  //       PostData(1, fOutputList);
-  //       return;
-  // }
-  if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
-      (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
+      (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
         PostData(1, fOutputList);
         return;
   }
+  // if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
+  //     (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  //       PostData(1, fOutputList);
+  //       return;
+  // }
 
 
 
@@ -4310,6 +4336,20 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
 
 
 
+
+
+
+
+  if ( possibleJPsiCopy.Pt() > -0.0000001 ) {
+    fPtReconVsGeneratedH->Fill( fPtGenerated, possibleJPsiCopy.Pt() );
+  }
+  if ( possibleJPsiCopy.Rapidity() > -5. ) {
+    fYReconVsGeneratedH->Fill( fYGenerated, possibleJPsiCopy.Rapidity() );
+  }
+  fChiSquareNDFMuonH->Fill(track[0]->Chi2perNDF());
+  fChiSquareNDFMuonH->Fill(track[1]->Chi2perNDF());
+
+
   // post the data
   PostData(1, fOutputList);
 }
@@ -4437,6 +4477,8 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
       }
       fMCinvariantMassDistrJPsiGeneratedTruthH->Fill(possibleJPsiMC.Mag());
       fMCptDimuonGeneratedTruthH->Fill(possibleJPsiMC.Pt());
+      fPtGenerated = possibleJPsiMC.Pt();
+      fYGenerated  = possibleJPsiMC.Rapidity();
       if (        possibleJPsiMC.Rapidity() > -4.0  && possibleJPsiMC.Rapidity() <= -3.75 ) {
         fMCEfficiencyPerRunRapidityH[0]->Fill( Form("%d", fRunNum) , 1 );
       } else if ( possibleJPsiMC.Rapidity() > -3.75 && possibleJPsiMC.Rapidity() <= -3.50 ) {

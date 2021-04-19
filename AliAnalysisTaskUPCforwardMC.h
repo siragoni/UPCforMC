@@ -221,6 +221,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fThetaMuonH;        //!
         TH1F*                   fPhiMuonH;          //!
         TH1F*                   fPtMuonH;           //!
+        TH1F*                   fChiSquareNDFMuonH; //!
 
                                 /**
                                  *
@@ -490,8 +491,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * a lego plot. See for an example:
                                  *https://www.researchgate.net/figure/The-migration-matrix-for-leading-p-jet-T-Element-i-j-is-the-probability-for-a-particle_fig1_222896619
                                  */
-        Double_t                fCosThetaGeneratedHelicityFrame;           //!
+        Double_t                fCosThetaGeneratedHelicityFrame;      //!
         Double_t                fPhiGeneratedHelicityFrame;           //!
+        Double_t                fPtGenerated;                         //!
+        Double_t                fYGenerated;                          //!
 
                                 /**
                                  * This is the RECONSTRUCTED
@@ -1300,6 +1303,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fInvariantMassDistributionOnlyPhiForSignalExtractionHelicityFrameMyVariableBinningH[30];  //!
 
 
+
+        TH2F*                   fPtReconVsGeneratedH; //!
+        TH2F*                   fYReconVsGeneratedH;  //!
+
         //_______________________________
         // CUTS
         /*
@@ -1384,7 +1391,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 46);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 47);
 };
 
 #endif
