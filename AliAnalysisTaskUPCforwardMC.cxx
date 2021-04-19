@@ -2538,7 +2538,7 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
 
 
 
-  fPtReconVsGeneratedH = new TH2F( "fPtReconVsGeneratedH", "fPtReconVsGeneratedH", 50, 0., 1., 50, 0., 1. );
+  fPtReconVsGeneratedH = new TH2F( "fPtReconVsGeneratedH", "fPtReconVsGeneratedH", 100, 0., 0.5, 100, 0., 0.5 );
   fOutputList->Add(fPtReconVsGeneratedH);
 
   fYReconVsGeneratedH = new TH2F( "fYReconVsGeneratedH", "fYReconVsGeneratedH", 60, -5., -2., 60, -5., -2. );
@@ -3032,16 +3032,16 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
   muonsCopy2_ReconCut[1]      = muonsCopy_ReconCut[1];
   possibleJPsiCopy_ReconCut = possibleJPsi_ReconCut;
   Double_t CosThetaHelicityFrameValue_ReconCut = CosThetaHelicityFrame( muonsCopy2_ReconCut[0], muonsCopy2_ReconCut[1], possibleJPsiCopy_ReconCut );
-  if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
-      (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
-        PostData(1, fOutputList);
-        return;
-  }
-  // if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
-  //     (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  // if( (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame + 0.1)) &&
+  //     (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame - 0.1))) {
   //       PostData(1, fOutputList);
   //       return;
   // }
+  if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
+      (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+        PostData(1, fOutputList);
+        return;
+  }
 
 
 

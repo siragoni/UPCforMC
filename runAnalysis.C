@@ -218,19 +218,19 @@ void runAnalysis(Int_t opt)
         // merging: run with "kTRUE" and "full" for normal run
         // to merge on grid run jobs in SetRunMode("terminate")
         // to collect final results set SetMergeViaJDL(kFALSE)
-        // alienHandler->SetMergeViaJDL(kTRUE);
+        alienHandler->SetMergeViaJDL(kTRUE);
 
         /* - The setting to kFALSE is to download the output files
            -
          */
-        alienHandler->SetMergeViaJDL(kFALSE);
+        // alienHandler->SetMergeViaJDL(kFALSE);
         alienHandler->SetMaxMergeStages(3);
 
 
         TString LHC18l7("LHC18l7");
         TString LHC16b2("LHC16b2a");
         // define the output folders
-        alienHandler->SetGridWorkingDir("MC_LHC18l7_AxEcheckL_10");
+        alienHandler->SetGridWorkingDir("MC_LHC18l7_AxEcheckL_11");
         alienHandler->SetGridOutputDir(LHC18l7.Data());
         // alienHandler->SetGridOutputDir(LHC18l7.Data());
 
@@ -250,12 +250,12 @@ void runAnalysis(Int_t opt)
             /* - The option FULL is to send the full analysis.
                -
              */
-            // alienHandler->SetRunMode("full");
+            alienHandler->SetRunMode("full");
 
             /* - This option TERMINATE is used for the merging of the files.
                -
              */
-            alienHandler->SetRunMode("terminate");
+            // alienHandler->SetRunMode("terminate");
             mgr->StartAnalysis("grid");
         }
     }
