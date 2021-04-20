@@ -1307,6 +1307,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH2F*                   fPtReconVsGeneratedH; //!
         TH2F*                   fYReconVsGeneratedH;  //!
 
+        Int_t                   fLabelTrk[2];//!
         //_______________________________
         // CUTS
         /*
@@ -1391,7 +1392,7 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
          * If I happen to encounter it again in the future, I will make sure to
          * record it!
          */
-        ClassDef(AliAnalysisTaskUPCforwardMC, 47);
+        ClassDef(AliAnalysisTaskUPCforwardMC, 48);
 };
 
 #endif

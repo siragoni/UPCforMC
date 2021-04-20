@@ -3037,8 +3037,21 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
   //       PostData(1, fOutputList);
   //       return;
   // }
-  if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
-      (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  // if( (CosThetaHelicityFrameValue_ReconCut > (fCosThetaGeneratedHelicityFrame + 0.1)) ||
+  //     (CosThetaHelicityFrameValue_ReconCut < (fCosThetaGeneratedHelicityFrame - 0.1))) {
+  //       PostData(1, fOutputList);
+  //       return;
+  // }
+  Bool_t trk0_to_MCtrk0 = (track[0]->GetLabel() == fLabelTrk[0]) ? 1 : 0;
+  Bool_t trk0_to_MCtrk1 = (track[0]->GetLabel() == fLabelTrk[1]) ? 1 : 0;
+  Bool_t trk1_to_MCtrk0 = (track[1]->GetLabel() == fLabelTrk[0]) ? 1 : 0;
+  Bool_t trk1_to_MCtrk1 = (track[1]->GetLabel() == fLabelTrk[1]) ? 1 : 0;
+  // if(  !( (trk0_to_MCtrk0 || trk0_to_MCtrk1) && (trk1_to_MCtrk0 || trk1_to_MCtrk1)  ) ) {
+  //       PostData(1, fOutputList);
+  //       return;
+  // }
+  if( (possibleJPsiCopy_ReconCut.Rapidity() > (fYGenerated + 0.05)) ||
+      (possibleJPsiCopy_ReconCut.Rapidity() < (fYGenerated - 0.05))) {
         PostData(1, fOutputList);
         return;
   }
@@ -4433,12 +4446,13 @@ void AliAnalysisTaskUPCforwardMC::ProcessMCParticles(AliMCEvent* fMCEventArg)
     if (   TMath::Abs(mcParticle->PdgCode()) == 13 ) {
       if ( nGoodMuonsMC < 2 ) {
         // cout << "Ok" << nGoodMuonsMC << endl;
-        pT[nGoodMuonsMC]     = mcParticle->Pt();
-        eta[nGoodMuonsMC]    = mcParticle->Eta();
-        pseudo[nGoodMuonsMC] = mcParticle->Y();
-        phi[nGoodMuonsMC]    = mcParticle->Phi();
-        charge[nGoodMuonsMC] = mcParticle->Charge();
-        pdg[nGoodMuonsMC]    = mcParticle->PdgCode();
+        pT[nGoodMuonsMC]        = mcParticle->Pt();
+        eta[nGoodMuonsMC]       = mcParticle->Eta();
+        pseudo[nGoodMuonsMC]    = mcParticle->Y();
+        phi[nGoodMuonsMC]       = mcParticle->Phi();
+        charge[nGoodMuonsMC]    = mcParticle->Charge();
+        pdg[nGoodMuonsMC]       = mcParticle->PdgCode();
+        fLabelTrk[nGoodMuonsMC] = mcParticle->Label();
         muonsMC[nGoodMuonsMC].SetPtEtaPhiM( pT[nGoodMuonsMC],
                                             eta[nGoodMuonsMC],
                                             phi[nGoodMuonsMC],
