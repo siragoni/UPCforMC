@@ -173,6 +173,17 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
 
 
                                 /**
+                                 * This function computes
+                                 * CosTheta between  in the CS frame
+                                 * using Quantum Tomography.
+                                 */
+        Double_t                CosThetaHEtoCS( TLorentzVector muonPositive,
+                                                TLorentzVector muonNegative,
+                                                TLorentzVector possibleJPsi );
+
+
+
+                                /**
                                  * Use the class as a data member. It contains
                                  * the cuts for the muon track.
                                  */
@@ -493,8 +504,21 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  */
         Double_t                fCosThetaGeneratedHelicityFrame;      //!
         Double_t                fPhiGeneratedHelicityFrame;           //!
+        Double_t                fTildePhiGeneratedHelicityFramePos;      //!
+        Double_t                fTildePhiGeneratedHelicityFrameNeg;      //!
         Double_t                fPtGenerated;                         //!
         Double_t                fYGenerated;                          //!
+        TH1F*                   fCosThetaRecMinusGenHelicityH;      //!
+        TH1F*                   fCosThetaRecMinusGenHelicityRelativeH;      //!
+        TH1F*                   fPhiRecMinusGenHelicityH;      //!
+        TH2F*                   fPhiRecVsGenHelicityH;      //!
+        TH2F*                   fPhiRecVsGenCSH;      //!
+        TH2F*                   fTildePhiRecVsGenHelicityH;      //!
+        TH2F*                   fTildePhiRecVsGenCSH;      //!
+        TH1F*                   fPhiRecMinusGenHelicityRelativeH;      //!
+        TH1F*                   fTildePhiRecMinusGenHelicityH;      //!
+        TH1F*                   fTildePhiRecMinusGenHelicityRelativeH;      //!
+
 
                                 /**
                                  * This is the RECONSTRUCTED
@@ -546,6 +570,9 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
                                  * NOTE: this is only in Phi.
                                  */
         TH2F*                   fBinMigrationForPhiHelicityH;           //!
+        TH2F*                   fBinMigrationForTildePhiHelicityH;      //!
+        TH2F*                   fBinMigrationForPhiCSH;                 //!
+        TH2F*                   fBinMigrationForTildePhiCSH;            //!
 
         //_______________________________
         // HELICITY AND COLLINS-SOPER
@@ -1149,6 +1176,10 @@ class AliAnalysisTaskUPCforwardMC : public AliAnalysisTaskSE
         TH1F*                   fCosThetaCsFrameTwentyfiveBinsSidebandsH;          //!
         TH1F*                   fCosThetaHelicityFrameTwentyfiveBinsIncohH;        //!
         TH1F*                   fCosThetaCsFrameTwentyfiveBinsIncohH;              //!
+
+        TH1F*                   fCosThetaHEtoCSH;             //!
+        TH1F*                   fMCCosThetaHEtoCSH;           //!
+
 
                                 /**
                                  * This histogram shows CosTheta
