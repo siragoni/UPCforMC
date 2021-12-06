@@ -2604,14 +2604,18 @@ void AliAnalysisTaskUPCforwardMC::UserCreateOutputObjects()
 
 
 
-  fPhiRecVsGenHelicityH = new TH2F( "fPhiRecVsGenHelicityH", "fPhiRecVsGenHelicityH", 25, 0., 2.*TMath::Pi(), 24, 0., 2.*TMath::Pi() );
+  // fPhiRecVsGenHelicityH = new TH2F( "fPhiRecVsGenHelicityH", "fPhiRecVsGenHelicityH", 25, 0., 2.*TMath::Pi(), 24, 0., 2.*TMath::Pi() );
+  fPhiRecVsGenHelicityH = new TH2F( "fPhiRecVsGenHelicityH", "fPhiRecVsGenHelicityH", 600, 0., 2.*TMath::Pi(), 600, 0., 2.*TMath::Pi() );
   fOutputList->Add(fPhiRecVsGenHelicityH);
-  fPhiRecVsGenCSH = new TH2F( "fPhiRecVsGenCSH", "fPhiRecVsGenCSH", 25, 0., 2.*TMath::Pi(), 25, 0., 2.*TMath::Pi() );
+  // fPhiRecVsGenCSH = new TH2F( "fPhiRecVsGenCSH", "fPhiRecVsGenCSH", 25, 0., 2.*TMath::Pi(), 25, 0., 2.*TMath::Pi() );
+  fPhiRecVsGenCSH = new TH2F( "fPhiRecVsGenCSH", "fPhiRecVsGenCSH", 600, 0., 2.*TMath::Pi(), 600, 0., 2.*TMath::Pi() );
   fOutputList->Add(fPhiRecVsGenCSH);
 
-  fTildePhiRecVsGenHelicityH = new TH2F( "fTildePhiRecVsGenHelicityH", "fTildePhiRecVsGenHelicityH", 25, 0., 2.*TMath::Pi(), 24, 0., 2.*TMath::Pi() );
+  // fTildePhiRecVsGenHelicityH = new TH2F( "fTildePhiRecVsGenHelicityH", "fTildePhiRecVsGenHelicityH", 25, 0., 2.*TMath::Pi(), 24, 0., 2.*TMath::Pi() );
+  fTildePhiRecVsGenHelicityH = new TH2F( "fTildePhiRecVsGenHelicityH", "fTildePhiRecVsGenHelicityH", 600, 0., 2.*TMath::Pi(), 600, 0., 2.*TMath::Pi() );
   fOutputList->Add(fTildePhiRecVsGenHelicityH);
-  fTildePhiRecVsGenCSH = new TH2F( "fTildePhiRecVsGenCSH", "fTildePhiRecVsGenCSH", 25, 0., 2.*TMath::Pi(), 25, 0., 2.*TMath::Pi() );
+  // fTildePhiRecVsGenCSH = new TH2F( "fTildePhiRecVsGenCSH", "fTildePhiRecVsGenCSH", 25, 0., 2.*TMath::Pi(), 25, 0., 2.*TMath::Pi() );
+  fTildePhiRecVsGenCSH = new TH2F( "fTildePhiRecVsGenCSH", "fTildePhiRecVsGenCSH", 600, 0., 2.*TMath::Pi(), 600, 0., 2.*TMath::Pi() );
   fOutputList->Add(fTildePhiRecVsGenCSH);
 
   //_______________________________
@@ -3827,9 +3831,10 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
 
           fPhiHelicityFrameTwentyfiveBinsH     ->Fill( PhiHelicityFrameValue10 );
           fPhiHelicityFrameTwentyfiveBinsHv2   ->Fill( PhiHelicityFrameValue10 + TMath::Pi() );
+          fPhiRecVsGenHelicityH->Fill( PhiHelicityFrameValue10 + TMath::Pi() , fPhiGeneratedHelicityFrame + TMath::Pi()  );
           if ( (CosThetaHelicityFrameValue10 > -0.6) && (CosThetaHelicityFrameValue10 < 0.6) ) {
             fPhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( PhiHelicityFrameValue10 + TMath::Pi() );
-            fPhiRecVsGenHelicityH->Fill( PhiHelicityFrameValue10 + TMath::Pi() , fPhiGeneratedHelicityFrame + TMath::Pi()  );
+            // fPhiRecVsGenHelicityH->Fill( PhiHelicityFrameValue10 + TMath::Pi() , fPhiGeneratedHelicityFrame + TMath::Pi()  );
           }
           if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fPhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( PhiHelicityFrameValue10 );
           if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fPhiHelicityFrameTwentyfiveBinsTriggerH[1]->Fill( PhiHelicityFrameValue10 );
@@ -3852,9 +3857,10 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           if( CosThetaHelicityFrameValue10 > 0 ){
             fTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiPositiveCosTheta );
             fTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiPositiveCosThetav2 );
+            fTildePhiRecVsGenHelicityH->Fill( TildePhiPositiveCosThetav2,  fTildePhiGeneratedHelicityFramePos  );
             if ( CosThetaHelicityFrameValue10 < 0.6 ) {
               fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiPositiveCosThetav2 );
-              fTildePhiRecVsGenHelicityH->Fill( TildePhiPositiveCosThetav2,  fTildePhiGeneratedHelicityFramePos  );
+              // fTildePhiRecVsGenHelicityH->Fill( TildePhiPositiveCosThetav2,  fTildePhiGeneratedHelicityFramePos  );
             }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiPositiveCosTheta );
             if ( (track[0]->Pt() > 0.90) && (track[1]->Pt() > 0.90) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[1]->Fill( TildePhiPositiveCosTheta );
@@ -3875,9 +3881,10 @@ void AliAnalysisTaskUPCforwardMC::UserExec(Option_t *)
           } else {
             fTildePhiHelicityFrameTwentyfiveBinsH  ->Fill( TildePhiNegativeCosTheta );
             fTildePhiHelicityFrameTwentyfiveBinsHv2->Fill( TildePhiNegativeCosThetav2 );
+            fTildePhiRecVsGenHelicityH->Fill( TildePhiNegativeCosThetav2,  fTildePhiGeneratedHelicityFrameNeg  );
             if ( CosThetaHelicityFrameValue10 > -0.6 ) {
               fTildePhiHelicityFrameTwentyfiveBinsHv2_restrict->Fill( TildePhiNegativeCosThetav2 );
-              fTildePhiRecVsGenHelicityH->Fill( TildePhiNegativeCosThetav2,  fTildePhiGeneratedHelicityFrameNeg  );
+              // fTildePhiRecVsGenHelicityH->Fill( TildePhiNegativeCosThetav2,  fTildePhiGeneratedHelicityFrameNeg  );
 
             }
             if ( (track[0]->Pt() > 0.85) && (track[1]->Pt() > 0.85) ) fTildePhiHelicityFrameTwentyfiveBinsTriggerH[0]->Fill( TildePhiNegativeCosTheta );
